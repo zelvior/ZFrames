@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZFrames | Advanced Grid Workspace</title>
+    <title>Zelvior ZFrames | Advanced Workspace</title>
     
-    <!-- Typography -->
     <link rel="preconnect" href="https://rsms.me/">
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,14 +12,14 @@
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 
     <style>
-        /* --- Color Tokens --- */
+        /* --- Pro-Grade Color Palette --- */
         :root {
-            --bg-primary: #0D0F13;
-            --bg-surface: #16191E;
-            --text-secondary: #6B727E;
-            --text-primary: #E1E4E8;
-            --accent: #C5A059;
-            --accent-hover: #D6B26A;
+            --bg-primary: #0B0E11;
+            --bg-surface: #1A1D21;
+            --text-secondary: #7D8590;
+            --text-primary: #EDEFF2;
+            --accent: #D4AF37;
+            --accent-hover: #F2C94C;
             --border-radius-card: 16px;
             --border-radius-pill: 9999px;
             
@@ -50,7 +49,7 @@
         header {
             background-color: var(--bg-surface); padding: 1rem 1.5rem;
             display: flex; justify-content: space-between; align-items: center;
-            border-bottom: 1px solid rgba(107, 114, 126, 0.2);
+            border-bottom: 1px solid rgba(125, 133, 144, 0.15);
             flex-wrap: wrap; gap: 1rem;
         }
 
@@ -67,13 +66,10 @@
             transition: all 0.2s ease; display: flex; align-items: center; gap: 0.5rem;
             white-space: nowrap;
         }
-        .btn:hover { border-color: var(--text-primary); background-color: rgba(225, 228, 232, 0.05); }
+        .btn:hover { border-color: var(--text-primary); background-color: rgba(237, 239, 242, 0.05); }
         
         .btn-primary { background-color: var(--accent); color: var(--bg-primary); border: none; font-weight: 700; }
-        .btn-primary:hover { background-color: var(--accent-hover); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(197, 160, 89, 0.2); }
-        
-        .btn-support { background-color: rgba(197, 160, 89, 0.1); color: var(--accent); border: 1px solid var(--accent); }
-        .btn-support:hover { background-color: var(--accent); color: var(--bg-primary); }
+        .btn-primary:hover { background-color: var(--accent-hover); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(212, 175, 55, 0.2); }
 
         /* --- Workspace Layout --- */
         main {
@@ -86,21 +82,22 @@
         .frame-card {
             background-color: var(--bg-surface); border-radius: var(--border-radius-card);
             display: flex; flex-direction: column; overflow: hidden;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); border: 1px solid rgba(107, 114, 126, 0.15);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); border: 1px solid rgba(125, 133, 144, 0.1);
             height: clamp(450px, 65vh, 850px); 
             transition: border-color 0.2s, box-shadow 0.2s;
         }
-        .frame-card:hover { box-shadow: 0 6px 25px rgba(0, 0, 0, 0.5); border-color: rgba(197, 160, 89, 0.4); }
+        .frame-card:hover { box-shadow: 0 6px 25px rgba(0, 0, 0, 0.5); border-color: rgba(212, 175, 55, 0.3); }
 
         .frame-header {
-            display: flex; padding: 0.6rem 0.75rem; background-color: rgba(13, 15, 19, 0.8);
-            gap: 0.4rem; align-items: center; border-bottom: 1px solid rgba(107, 114, 126, 0.2);
+            display: flex; padding: 0.6rem 0.75rem; background-color: rgba(11, 14, 17, 0.8);
+            gap: 0.4rem; align-items: center; border-bottom: 1px solid rgba(125, 133, 144, 0.15);
         }
 
         .input-wrapper {
             flex: 1; display: flex; min-width: 0;
-            background-color: var(--bg-primary); border: 1px solid rgba(107, 114, 126, 0.3);
+            background-color: var(--bg-primary); border: 1px solid rgba(125, 133, 144, 0.3);
             border-radius: var(--border-radius-pill); overflow: hidden;
+            transition: border-color 0.2s;
         }
         .input-wrapper:focus-within { border-color: var(--accent); }
 
@@ -110,12 +107,21 @@
             outline: none; min-width: 0;
         }
 
+        .proxy-toggle {
+            background: transparent; border: none; border-left: 1px solid rgba(125, 133, 144, 0.3);
+            color: var(--text-secondary); padding: 0 0.75rem; cursor: pointer;
+            display: flex; align-items: center; font-size: 0.75rem; font-weight: bold;
+            transition: all 0.2s;
+        }
+        .proxy-toggle.active { color: var(--bg-primary); background-color: var(--accent); }
+        .proxy-toggle:hover:not(.active) { color: var(--accent); background-color: rgba(212, 175, 55, 0.1); }
+
         .icon-btn {
             background: none; border: none; color: var(--text-secondary); cursor: pointer;
             padding: 0.4rem; border-radius: 50%; display: flex; align-items: center; justify-content: center;
             transition: all 0.2s; flex-shrink: 0;
         }
-        .icon-btn:hover { color: var(--text-primary); background-color: rgba(225, 228, 232, 0.1); }
+        .icon-btn:hover { color: var(--text-primary); background-color: rgba(237, 239, 242, 0.1); }
         .icon-btn.close:hover { color: #ff4c4c; background-color: rgba(255, 76, 76, 0.1); }
 
         .iframe-container { flex: 1; position: relative; background-color: #ffffff; }
@@ -129,7 +135,7 @@
         }
 
         .spinner {
-            width: 24px; height: 24px; border: 3px solid rgba(197, 160, 89, 0.3);
+            width: 24px; height: 24px; border: 3px solid rgba(212, 175, 55, 0.3);
             border-top: 3px solid var(--accent); border-radius: 50%;
             animation: spin 1s linear infinite; margin-bottom: 1rem; display: none;
         }
@@ -138,29 +144,11 @@
         /* --- Footer --- */
         footer {
             background-color: var(--bg-surface); padding: 1.5rem; display: flex;
-            justify-content: space-between; align-items: center; border-top: 1px solid rgba(107, 114, 126, 0.2);
+            justify-content: space-between; align-items: center; border-top: 1px solid rgba(125, 133, 144, 0.15);
             flex-wrap: wrap; gap: 1rem;
         }
         .credits { color: var(--text-secondary); font-size: 0.9rem; }
         .credits span { color: var(--accent); font-weight: bold; }
-        .socials { display: flex; gap: 1rem; }
-        .social-link { color: var(--text-secondary); text-decoration: none; transition: color 0.2s; display: flex; align-items: center; }
-        .social-link:hover { color: var(--accent); }
-        .social-link svg { width: 22px; height: 22px; fill: currentColor; }
-
-        /* --- Documentation --- */
-        dialog {
-            margin: auto; background-color: var(--bg-surface); color: var(--text-primary);
-            border: 1px solid rgba(107, 114, 126, 0.3); border-radius: var(--border-radius-card);
-            padding: 2rem; max-width: 600px; width: 90%; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-        }
-        dialog::backdrop { background: rgba(13, 15, 19, 0.8); backdrop-filter: blur(4px); }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 1px solid rgba(107, 114, 126, 0.2); padding-bottom: 1rem; }
-        .modal-header h2 { color: var(--accent); }
-        .doc-section { margin-bottom: 1.5rem; }
-        .doc-section h3 { margin-bottom: 0.5rem; color: var(--text-primary); font-size: 1.1rem; }
-        .doc-section p, .doc-section ul { color: var(--text-secondary); font-size: 0.95rem; line-height: 1.5; }
-        .doc-section ul { padding-left: 1.5rem; margin-top: 0.5rem; }
 
         @media (max-width: 600px) {
             header, footer { flex-direction: column; justify-content: center; text-align: center; }
@@ -179,14 +167,6 @@
             Z<span>Frames</span>
         </div>
         <div class="nav-controls">
-            <button class="btn" onclick="openDocs()">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-                Docs
-            </button>
-            <button class="btn btn-support" onclick="window.open('https://zelvior.github.io/Support/', '_blank')">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
-                Free Support
-            </button>
             <button class="btn btn-primary" onclick="addFrame()">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                 Add Window
@@ -197,35 +177,8 @@
     <main id="workspace"></main>
 
     <footer>
-        <div class="credits">Developed & Designed by <span>Zelvior</span> from Pakistan 🇵🇰</div>
-        <div class="socials">
-            <a href="https://web.sketchub.in/u/Zelvior/" target="_blank" class="social-link" title="Sketchub"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></a>
-            <a href="mailto:Zelvior@proton.me" class="social-link" title="Email Support"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" fill="none" stroke="currentColor" stroke-width="2"/><polyline points="22,6 12,13 2,6" fill="none" stroke="currentColor" stroke-width="2"/></svg></a>
-            <a href="https://youtube.com/@zelviorhere" target="_blank" class="social-link" title="YouTube"><svg viewBox="0 0 24 24"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33 2.78 2.78 0 0 0 1.94 2c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.33 29 29 0 0 0-.46-5.33z" fill="none" stroke="currentColor" stroke-width="2"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02" fill="currentColor"/></svg></a>
-            <a href="https://zelvior.blogspot.com/" target="_blank" class="social-link" title="Website"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/><line x1="2" y1="12" x2="22" y2="12" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" fill="none" stroke="currentColor" stroke-width="2"/></svg></a>
-        </div>
+        <div class="credits">Developed & Designed by <span>Zelvior</span></div>
     </footer>
-
-    <!-- Documentation Modal -->
-    <dialog id="docsModal">
-        <div class="modal-header">
-            <h2>ZFrames Documentation</h2>
-            <button class="icon-btn close" onclick="closeDocs()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
-        </div>
-        <div class="doc-section">
-            <h3>About</h3>
-            <p>ZFrames is an advanced workspace utility designed for high-performance multitasking. Open unlimited side-by-side grid windows.</p>
-        </div>
-        <div class="doc-section">
-            <h3>Anti-Blocking & Tab Lock Features</h3>
-            <ul>
-                <li><strong>Anti-Frame Blocking:</strong> Every website connection runs through an absolute reverse-header pipeline, modifying strict cross-origin policies so pages render flawlessly.</li>
-                <li><strong>Tab Hijack Prevention:</strong> Link configurations are tightly managed via native multi-layered iframe sandboxing parameters. This intercepts link actions that attempt to spawn standalone browser windows or external tabs.</li>
-            </ul>
-        </div>
-        <div class="doc-section"><h3>Credits & Assets</h3><ul><li><strong>Developer:</strong> Zelvior (Pakistan)</li><li><strong>UI Typography:</strong> <span class="code-font">Inter</span> / <span class="code-font">JetBrains Mono</span></li></ul></div>
-        <div class="doc-section"><h3>License</h3><p><strong>Apache License 2.0</strong></p></div>
-    </dialog>
 
     <script>
         const workspace = document.getElementById('workspace');
@@ -245,6 +198,10 @@
                     </button>
                     <div class="input-wrapper">
                         <input type="text" class="url-input" placeholder="Search or type URL..." onkeydown="handleEnter(event, '${frameId}')">
+                        <button class="proxy-toggle" onclick="toggleProxy(this, '${frameId}')" title="Toggle Proxy if site refuses to connect">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:4px"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                            PROXY
+                        </button>
                     </div>
                     <button class="icon-btn" onclick="triggerLoad('${frameId}')" title="Go">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
@@ -256,9 +213,8 @@
                 <div class="iframe-container">
                     <div class="frame-overlay" id="overlay-${frameId}">
                         <div class="spinner" id="spinner-${frameId}"></div>
-                        <span id="status-${frameId}">Type a web address or search query to begin.</span>
+                        <span id="status-${frameId}">Type a web address or search query to begin.<br><br><span style="color:var(--text-secondary); font-size: 0.85em;">Using native IP. If screen stays blank, click PROXY.</span></span>
                     </div>
-                    <!-- Combined anti-hijacking sandbox flags -->
                     <iframe id="iframe-${frameId}" src="" 
                             sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-modals allow-popups-to-escape-sandbox" 
                             onload="frameLoaded('${frameId}')">
@@ -273,30 +229,42 @@
             if (event.key === 'Enter') triggerLoad(frameId);
         }
 
+        function toggleProxy(btn, frameId) {
+            btn.classList.toggle('active');
+            triggerLoad(frameId);
+        }
+
         function triggerLoad(frameId) {
             const card = document.getElementById(frameId);
             const input = card.querySelector('.url-input');
             const iframe = card.querySelector('iframe');
+            const isProxyActive = card.querySelector('.proxy-toggle').classList.contains('active');
             
             let val = input.value.trim();
             if (!val) return;
 
-            // Show Loading State
             document.getElementById(`overlay-${frameId}`).style.display = 'flex';
             document.getElementById(`spinner-${frameId}`).style.display = 'block';
-            document.getElementById(`status-${frameId}`).innerText = 'Securing workspace environment...';
+            document.getElementById(`status-${frameId}`).innerText = isProxyActive ? 'Routing through secure proxy...' : 'Connecting via native IP...';
 
             let processedUrl = val;
 
             if (val.includes(' ') || (!val.includes('.') && !val.includes('localhost'))) {
-                // Parse search queries safely with iframe friendly viewports
                 processedUrl = `https://www.google.com/search?igu=1&q=${encodeURIComponent(val)}`;
             } else {
                 if (!/^https?:\/\//i.test(val)) {
                     processedUrl = `https://${val}`;
                 }
-                // Automatically pass custom domains through header proxy to force target retention and drop frames constraints
-                processedUrl = `https://corsproxy.io/?${encodeURIComponent(processedUrl)}`;
+                
+                // ONLY use proxy if the user explicitly clicked the toggle
+                if (isProxyActive) {
+                    processedUrl = `https://corsproxy.io/?${encodeURIComponent(processedUrl)}`;
+                }
+            }
+
+            // Keep the input looking clean if not proxying
+            if(!isProxyActive && input.value !== processedUrl && !val.includes(' ')) {
+                input.value = processedUrl;
             }
 
             iframe.src = processedUrl;
@@ -317,15 +285,6 @@
             const card = document.getElementById(frameId);
             if (card) card.remove();
         }
-
-        // Modal Controls
-        const docsModal = document.getElementById('docsModal');
-        function openDocs() { docsModal.showModal(); }
-        function closeDocs() { docsModal.close(); }
-        docsModal.addEventListener('click', (e) => {
-            const dim = docsModal.getBoundingClientRect();
-            if (e.clientX < dim.left || e.clientX > dim.right || e.clientY < dim.top || e.clientY > dim.bottom) { docsModal.close(); }
-        });
     </script>
 </body>
 </html>
