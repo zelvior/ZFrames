@@ -24,7 +24,6 @@
             --border-radius-card: 16px;
             --border-radius-pill: 9999px;
             
-            /* Typography */
             font-family: Inter, sans-serif;
             font-feature-settings: 'liga' 1, 'calt' 1;
         }
@@ -33,12 +32,7 @@
             :root { font-family: InterVariable, sans-serif; }
         }
 
-        /* --- Global Reset --- */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
             background-color: var(--bg-primary);
@@ -49,27 +43,15 @@
             overflow-x: hidden;
         }
 
-        code, pre, .code-font {
-            font-family: 'JetBrains Mono', monospace;
-        }
+        code, pre, .code-font { font-family: 'JetBrains Mono', monospace; }
 
-        /* --- Scrollbar --- */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: var(--bg-primary);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: var(--text-secondary);
-            border-radius: var(--border-radius-pill);
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--accent);
-        }
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-primary); }
+        ::-webkit-scrollbar-thumb { background: var(--text-secondary); border-radius: var(--border-radius-pill); }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
 
-        /* --- Navigation & Header --- */
+        /* Header */
         header {
             background-color: var(--bg-surface);
             padding: 1rem 2rem;
@@ -81,289 +63,99 @@
             gap: 1rem;
         }
 
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-weight: 700;
-            font-size: 1.5rem;
-            color: var(--text-primary);
-        }
+        .brand { display: flex; align-items: center; gap: 0.5rem; font-weight: 700; font-size: 1.5rem; }
+        .brand span { color: var(--accent); }
+        .nav-controls { display: flex; gap: 1rem; flex-wrap: wrap; }
 
-        .brand span {
-            color: var(--accent);
-        }
-
-        .nav-controls {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-
-        /* --- Buttons (Pills) --- */
+        /* Buttons */
         .btn {
-            background-color: transparent;
-            color: var(--text-primary);
-            border: 1px solid var(--text-secondary);
-            padding: 0.5rem 1.25rem;
-            border-radius: var(--border-radius-pill);
-            cursor: pointer;
-            font-family: inherit;
-            font-weight: 500;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+            background-color: transparent; color: var(--text-primary);
+            border: 1px solid var(--text-secondary); padding: 0.5rem 1.25rem;
+            border-radius: var(--border-radius-pill); cursor: pointer;
+            font-family: inherit; font-weight: 500; transition: all 0.2s ease;
+            display: flex; align-items: center; gap: 0.5rem;
         }
+        .btn:hover { border-color: var(--text-primary); background-color: rgba(225, 228, 232, 0.05); }
+        .btn-primary { background-color: var(--accent); color: var(--bg-primary); border: none; font-weight: 700; }
+        .btn-primary:hover { background-color: var(--accent-hover); transform: translateY(-1px); }
+        .btn-support { background-color: rgba(197, 160, 89, 0.1); color: var(--accent); border: 1px solid var(--accent); }
+        .btn-support:hover { background-color: var(--accent); color: var(--bg-primary); }
 
-        .btn:hover {
-            border-color: var(--text-primary);
-            background-color: rgba(225, 228, 232, 0.05);
-        }
-
-        .btn-primary {
-            background-color: var(--accent);
-            color: var(--bg-primary);
-            border: none;
-            font-weight: 700;
-        }
-
-        .btn-primary:hover {
-            background-color: var(--accent-hover);
-            transform: translateY(-1px);
-        }
-
-        .btn-support {
-            background-color: rgba(197, 160, 89, 0.1);
-            color: var(--accent);
-            border: 1px solid var(--accent);
-        }
-
-        .btn-support:hover {
-            background-color: var(--accent);
-            color: var(--bg-primary);
-        }
-
-        /* --- Main Workspace (Grid) --- */
+        /* Main Workspace */
         main {
-            flex: 1;
-            padding: 1.5rem;
-            display: grid;
-            gap: 1.5rem;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            align-items: stretch;
+            flex: 1; padding: 1.5rem; display: grid; gap: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); align-items: stretch;
         }
 
-        /* --- Cards (Iframes) --- */
+        /* Frame Cards */
         .frame-card {
-            background-color: var(--bg-surface);
-            border-radius: var(--border-radius-card);
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(107, 114, 126, 0.15);
-            min-height: 400px;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            background-color: var(--bg-surface); border-radius: var(--border-radius-card);
+            display: flex; flex-direction: column; overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); border: 1px solid rgba(107, 114, 126, 0.15);
+            min-height: 450px; transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
-
-        .frame-card:hover {
-            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.5);
-            border-color: rgba(197, 160, 89, 0.3);
-        }
+        .frame-card:hover { box-shadow: 0 6px 25px rgba(0, 0, 0, 0.5); border-color: rgba(197, 160, 89, 0.3); }
 
         .frame-header {
-            display: flex;
-            padding: 0.75rem 1rem;
-            background-color: rgba(13, 15, 19, 0.5);
-            gap: 0.5rem;
-            align-items: center;
-            border-bottom: 1px solid rgba(107, 114, 126, 0.2);
+            display: flex; padding: 0.75rem 1rem; background-color: rgba(13, 15, 19, 0.5);
+            gap: 0.5rem; align-items: center; border-bottom: 1px solid rgba(107, 114, 126, 0.2);
         }
 
         .url-input {
-            flex: 1;
-            background-color: var(--bg-primary);
-            border: 1px solid rgba(107, 114, 126, 0.3);
-            color: var(--text-primary);
-            padding: 0.5rem 1rem;
-            border-radius: var(--border-radius-pill);
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.85rem;
-            outline: none;
-            transition: border-color 0.2s;
+            flex: 1; background-color: var(--bg-primary); border: 1px solid rgba(107, 114, 126, 0.3);
+            color: var(--text-primary); padding: 0.5rem 1rem; border-radius: var(--border-radius-pill);
+            font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; outline: none; transition: border-color 0.2s;
         }
-
-        .url-input:focus {
-            border-color: var(--accent);
-        }
+        .url-input:focus { border-color: var(--accent); }
 
         .icon-btn {
-            background: none;
-            border: none;
-            color: var(--text-secondary);
-            cursor: pointer;
-            padding: 0.25rem;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            background: none; border: none; color: var(--text-secondary); cursor: pointer;
+            padding: 0.25rem; border-radius: 50%; display: flex; align-items: center; justify-content: center;
             transition: color 0.2s, background-color 0.2s;
         }
+        .icon-btn:hover { color: var(--text-primary); background-color: rgba(225, 228, 232, 0.1); }
+        .icon-btn.close:hover { color: #ff4c4c; background-color: rgba(255, 76, 76, 0.1); }
 
-        .icon-btn:hover {
-            color: var(--text-primary);
-            background-color: rgba(225, 228, 232, 0.1);
-        }
+        .iframe-container { flex: 1; position: relative; background-color: #ffffff; }
+        iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; z-index: 1; }
 
-        .icon-btn.close:hover {
-            color: #ff4c4c;
-            background-color: rgba(255, 76, 76, 0.1);
-        }
-
-        .iframe-container {
-            flex: 1;
-            position: relative;
-            background-color: #ffffff; /* Default white for sites */
-        }
-
-        iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-
-        /* --- Footer --- */
-        footer {
-            background-color: var(--bg-surface);
-            padding: 1.5rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-top: 1px solid rgba(107, 114, 126, 0.2);
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        .credits {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-
-        .credits span {
-            color: var(--accent);
-            font-weight: bold;
-        }
-
-        .socials {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .social-link {
-            color: var(--text-secondary);
-            text-decoration: none;
-            transition: color 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .social-link:hover {
-            color: var(--accent);
-        }
-
-        .social-link svg {
-            width: 20px;
-            height: 20px;
-            fill: currentColor;
-        }
-
-        /* --- Modal / Documentation --- */
-        dialog {
-            margin: auto;
-            background-color: var(--bg-surface);
-            color: var(--text-primary);
-            border: 1px solid rgba(107, 114, 126, 0.3);
-            border-radius: var(--border-radius-card);
-            padding: 2rem;
-            max-width: 600px;
-            width: 90%;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-        }
-
-        dialog::backdrop {
-            background: rgba(13, 15, 19, 0.8);
-            backdrop-filter: blur(4px);
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            border-bottom: 1px solid rgba(107, 114, 126, 0.2);
-            padding-bottom: 1rem;
-        }
-
-        .modal-header h2 {
-            color: var(--accent);
-        }
-
-        .doc-section {
-            margin-bottom: 1.5rem;
-        }
-
-        .doc-section h3 {
-            margin-bottom: 0.5rem;
-            color: var(--text-primary);
-            font-size: 1.1rem;
-        }
-
-        .doc-section p, .doc-section ul {
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-            line-height: 1.5;
-        }
-
-        .doc-section ul {
-            padding-left: 1.5rem;
-            margin-top: 0.5rem;
-        }
-
-        /* Note overlay for X-Frame-Options */
         .frame-overlay {
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--bg-primary);
-            color: var(--text-secondary);
-            z-index: 0;
-            padding: 2rem;
-            text-align: center;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.9rem;
-        }
-        
-        .iframe-container iframe {
-            z-index: 1;
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            display: flex; align-items: center; justify-content: center;
+            background: var(--bg-primary); color: var(--text-secondary); z-index: 0;
+            padding: 2rem; text-align: center; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem;
         }
 
-        /* Responsive Adjustments */
+        /* Footer */
+        footer {
+            background-color: var(--bg-surface); padding: 1.5rem 2rem; display: flex;
+            justify-content: space-between; align-items: center; border-top: 1px solid rgba(107, 114, 126, 0.2);
+            flex-wrap: wrap; gap: 1rem;
+        }
+        .credits { color: var(--text-secondary); font-size: 0.9rem; }
+        .credits span { color: var(--accent); font-weight: bold; }
+        .socials { display: flex; gap: 1rem; }
+        .social-link { color: var(--text-secondary); text-decoration: none; transition: color 0.2s; display: flex; align-items: center; gap: 0.5rem; }
+        .social-link:hover { color: var(--accent); }
+        .social-link svg { width: 20px; height: 20px; fill: currentColor; }
+
+        /* Modal */
+        dialog {
+            margin: auto; background-color: var(--bg-surface); color: var(--text-primary);
+            border: 1px solid rgba(107, 114, 126, 0.3); border-radius: var(--border-radius-card);
+            padding: 2rem; max-width: 600px; width: 90%; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+        dialog::backdrop { background: rgba(13, 15, 19, 0.8); backdrop-filter: blur(4px); }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 1px solid rgba(107, 114, 126, 0.2); padding-bottom: 1rem; }
+        .modal-header h2 { color: var(--accent); }
+        .doc-section { margin-bottom: 1.5rem; }
+        .doc-section h3 { margin-bottom: 0.5rem; color: var(--text-primary); font-size: 1.1rem; }
+        .doc-section p, .doc-section ul { color: var(--text-secondary); font-size: 0.95rem; line-height: 1.5; }
+        .doc-section ul { padding-left: 1.5rem; margin-top: 0.5rem; }
+
         @media (max-width: 768px) {
-            header, footer {
-                flex-direction: column;
-                justify-content: center;
-                text-align: center;
-            }
-            .nav-controls {
-                justify-content: center;
-            }
+            header, footer { flex-direction: column; justify-content: center; text-align: center; }
+            .nav-controls { justify-content: center; }
         }
     </style>
 </head>
@@ -390,79 +182,45 @@
         </div>
     </header>
 
-    <main id="workspace">
-        </main>
+    <main id="workspace"></main>
 
     <footer>
-        <div class="credits">
-            Developed & Designed by <span>Zelvior</span> from Pakistan 🇵🇰
-        </div>
+        <div class="credits">Developed & Designed by <span>Zelvior</span> from Pakistan 🇵🇰</div>
         <div class="socials">
-            <a href="https://web.sketchub.in/u/Zelvior/" target="_blank" class="social-link" title="Sketchub">
-                <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
-            </a>
-            <a href="mailto:Zelvior@proton.me" class="social-link" title="Email Support">
-                <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" fill="none" stroke="currentColor" stroke-width="2"/><polyline points="22,6 12,13 2,6" fill="none" stroke="currentColor" stroke-width="2"/></svg>
-            </a>
-            <a href="https://youtube.com/@zelviorhere" target="_blank" class="social-link" title="YouTube">
-                <svg viewBox="0 0 24 24"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33 2.78 2.78 0 0 0 1.94 2c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.33 29 29 0 0 0-.46-5.33z" fill="none" stroke="currentColor" stroke-width="2"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02" fill="currentColor"/></svg>
-            </a>
-            <a href="https://zelvior.blogspot.com/" target="_blank" class="social-link" title="Website">
-                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/><line x1="2" y1="12" x2="22" y2="12" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" fill="none" stroke="currentColor" stroke-width="2"/></svg>
-            </a>
+            <a href="https://web.sketchub.in/u/Zelvior/" target="_blank" class="social-link" title="Sketchub"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></a>
+            <a href="mailto:Zelvior@proton.me" class="social-link" title="Email Support"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" fill="none" stroke="currentColor" stroke-width="2"/><polyline points="22,6 12,13 2,6" fill="none" stroke="currentColor" stroke-width="2"/></svg></a>
+            <a href="https://youtube.com/@zelviorhere" target="_blank" class="social-link" title="YouTube"><svg viewBox="0 0 24 24"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33 2.78 2.78 0 0 0 1.94 2c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.33 29 29 0 0 0-.46-5.33z" fill="none" stroke="currentColor" stroke-width="2"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02" fill="currentColor"/></svg></a>
+            <a href="https://zelvior.blogspot.com/" target="_blank" class="social-link" title="Website"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/><line x1="2" y1="12" x2="22" y2="12" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" fill="none" stroke="currentColor" stroke-width="2"/></svg></a>
         </div>
     </footer>
 
     <dialog id="docsModal">
         <div class="modal-header">
             <h2>ZFrames Documentation</h2>
-            <button class="icon-btn close" onclick="closeDocs()">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-            </button>
+            <button class="icon-btn close" onclick="closeDocs()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
         </div>
-        
-        <div class="doc-section">
-            <h3>About</h3>
-            <p>ZFrames is an advanced workspace utility designed for high-performance multitasking. Open unlimited side-by-side grid windows to monitor, browse, or develop across multiple endpoints simultaneously.</p>
-        </div>
-
+        <div class="doc-section"><h3>About</h3><p>ZFrames is an advanced workspace utility designed for high-performance multitasking. Open unlimited side-by-side grid windows.</p></div>
         <div class="doc-section">
             <h3>Features & Usage</h3>
             <ul>
-                <li><strong>Dynamic Grid:</strong> The workspace automatically adjusts scaling based on the number of active frames.</li>
-                <li><strong>Maxed Out Iframes:</strong> Edge-to-edge rendering without borders for a seamless viewing experience.</li>
-                <li><strong>Note on Permissions:</strong> Due to web security standards (X-Frame-Options / Content Security Policy), some major websites (like Google or GitHub) block themselves from being loaded inside an iframe. This is a browser-level security feature.</li>
+                <li><strong>Smart URL Parser:</strong> Automatically handles search queries and domain formatting.</li>
+                <li><strong>Iframe Bypass:</strong> Uses targeted parameters to allow Google Search inside frames.</li>
+                <li><strong>Dynamic Grid:</strong> Scales automatically based on active frames.</li>
             </ul>
         </div>
-
-        <div class="doc-section">
-            <h3>Credits & Assets</h3>
-            <ul>
-                <li><strong>Developer:</strong> Zelvior (Pakistan)</li>
-                <li><strong>UI Typography:</strong> <span class="code-font">Inter</span> via rsms.me</li>
-                <li><strong>Code/Monospace:</strong> <span class="code-font">JetBrains Mono</span> via Google Fonts</li>
-            </ul>
-        </div>
-
-        <div class="doc-section">
-            <h3>License</h3>
-            <p><strong>Apache License 2.0</strong> - Free to use, modify, and distribute. Supporting the developer is completely optional!</p>
-        </div>
+        <div class="doc-section"><h3>Credits & Assets</h3><ul><li><strong>Developer:</strong> Zelvior (Pakistan)</li><li><strong>UI Typography:</strong> <span class="code-font">Inter</span> / <span class="code-font">JetBrains Mono</span></li></ul></div>
+        <div class="doc-section"><h3>License</h3><p><strong>Apache License 2.0</strong></p></div>
     </dialog>
 
     <script>
         const workspace = document.getElementById('workspace');
-        let frameCount = 0;
 
-        // Initialize with one empty frame
         document.addEventListener('DOMContentLoaded', () => {
-            addFrame('https://example.com');
+            addFrame();
         });
 
-        function addFrame(initialUrl = '') {
-            frameCount++;
+        function addFrame() {
             const frameId = `frame-${Date.now()}`;
-            
             const card = document.createElement('div');
             card.className = 'frame-card';
             card.id = frameId;
@@ -472,7 +230,7 @@
                     <button class="icon-btn" onclick="refreshFrame('${frameId}')" title="Refresh">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
                     </button>
-                    <input type="url" class="url-input" placeholder="https://..." value="${initialUrl}" onkeydown="handleEnter(event, '${frameId}')">
+                    <input type="text" class="url-input" placeholder="Enter URL or Search query..." onkeydown="handleEnter(event, '${frameId}')">
                     <button class="icon-btn" onclick="loadUrl('${frameId}')" title="Go">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
                     </button>
@@ -481,18 +239,43 @@
                     </button>
                 </div>
                 <div class="iframe-container">
-                    <div class="frame-overlay">Load a URL to begin.<br><br>Note: Sites with strict X-Frame-Options cannot be embedded.</div>
-                    <iframe id="iframe-${frameId}" src="${initialUrl}" sandbox="allow-same-origin allow-scripts allow-popups allow-forms"></iframe>
+                    <div class="frame-overlay">Type a web address or search term to begin.<br><br><span style="font-size: 0.8em; color: var(--accent);">Note: Sites enforcing strict X-Frame-Options (like Github) may still block embeds.</span></div>
+                    <iframe id="iframe-${frameId}" src="" sandbox="allow-same-origin allow-scripts allow-popups allow-forms"></iframe>
                 </div>
             `;
-
             workspace.appendChild(card);
+            card.querySelector('.url-input').focus();
         }
 
         function handleEnter(event, frameId) {
-            if (event.key === 'Enter') {
-                loadUrl(frameId);
+            if (event.key === 'Enter') loadUrl(frameId);
+        }
+
+        // --- THE MAGIC URL PARSER ---
+        function parseInput(val) {
+            val = val.trim();
+            if (!val) return '';
+            
+            // 1. If it explicitly has http/https, trust it directly
+            if (/^https?:\/\//i.test(val)) return val;
+            
+            // 2. If it has spaces, treat it as a search query
+            if (val.includes(' ')) {
+                // The ?igu=1 parameter is a secret workaround that allows Google search to load inside iframes!
+                return `https://www.google.com/search?igu=1&q=${encodeURIComponent(val)}`;
             }
+            
+            // 3. If it looks like a domain name (example.com, localhost:8080, 192.168.1.1)
+            const domainRegex = /^([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/.*)?$/;
+            const localhostRegex = /^localhost(:\d+)?(\/.*)?$/;
+            const ipRegex = /^\d{1,3}(\.\d{1,3}){3}(:\d+)?(\/.*)?$/;
+            
+            if (domainRegex.test(val) || localhostRegex.test(val) || ipRegex.test(val)) {
+                return `https://${val}`;
+            }
+            
+            // 4. Fallback for single words (treat as search)
+            return `https://www.google.com/search?igu=1&q=${encodeURIComponent(val)}`;
         }
 
         function loadUrl(frameId) {
@@ -500,53 +283,35 @@
             const input = card.querySelector('.url-input');
             const iframe = card.querySelector('iframe');
             
-            let url = input.value.trim();
-            if (url && !url.startsWith('http://') && !url.startsWith('https://')) {
-                url = 'https://' + url;
-                input.value = url;
-            }
-            
-            iframe.src = url;
+            const processedUrl = parseInput(input.value);
+            if (!processedUrl) return;
+
+            // Update the input to show what is actually loading
+            input.value = processedUrl;
+            iframe.src = processedUrl;
         }
 
         function refreshFrame(frameId) {
             const iframe = document.getElementById(`iframe-${frameId}`);
-            // Reassign src to force reload while bypassing some browser caching quirks
+            if(!iframe.src) return;
             const currentSrc = iframe.src;
             iframe.src = 'about:blank';
-            setTimeout(() => {
-                iframe.src = currentSrc;
-            }, 50);
+            setTimeout(() => iframe.src = currentSrc, 50);
         }
 
         function removeFrame(frameId) {
             const card = document.getElementById(frameId);
-            if (card) {
-                card.remove();
-                frameCount--;
-            }
+            if (card) card.remove();
         }
 
-        // Modal Controls
+        // Modal Logic
         const docsModal = document.getElementById('docsModal');
+        function openDocs() { docsModal.showModal(); }
+        function closeDocs() { docsModal.close(); }
         
-        function openDocs() {
-            docsModal.showModal();
-        }
-
-        function closeDocs() {
-            docsModal.close();
-        }
-
-        // Close modal when clicking outside of it
         docsModal.addEventListener('click', (e) => {
-            const dialogDimensions = docsModal.getBoundingClientRect();
-            if (
-                e.clientX < dialogDimensions.left ||
-                e.clientX > dialogDimensions.right ||
-                e.clientY < dialogDimensions.top ||
-                e.clientY > dialogDimensions.bottom
-            ) {
+            const dim = docsModal.getBoundingClientRect();
+            if (e.clientX < dim.left || e.clientX > dim.right || e.clientY < dim.top || e.clientY > dim.bottom) {
                 docsModal.close();
             }
         });
