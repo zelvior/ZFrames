@@ -1,290 +1,1359 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zelvior ZFrames | Advanced Workspace</title>
+    <title>ZFrames | Pro Ultra Multitasking Grid Workspace</title>
     
+    <!-- External Fonts & Icons -->
     <link rel="preconnect" href="https://rsms.me/">
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS Engine -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'InterVariable', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        brand: {
+                            gold: '#C5A059',
+                            goldHover: '#D6B26A',
+                            darkBg: '#090B0E',
+                            darkSurf: '#12161A',
+                            darkBorder: 'rgba(107, 114, 126, 0.25)'
+                        }
+                    }
+                }
+            }
+        };
+    </script>
 
     <style>
-        /* --- Pro-Grade Color Palette --- */
         :root {
-            --bg-primary: #0B0E11;
-            --bg-surface: #1A1D21;
-            --text-secondary: #7D8590;
-            --text-primary: #EDEFF2;
-            --accent: #D4AF37;
-            --accent-hover: #F2C94C;
-            --border-radius-card: 16px;
-            --border-radius-pill: 9999px;
-            
-            font-family: Inter, sans-serif;
-            font-feature-settings: 'liga' 1, 'calt' 1;
+            --accent: #C5A059;
+            --accent-glow: rgba(197, 160, 89, 0.15);
+            --neon-border: rgba(197, 160, 89, 0.3);
         }
 
-        @supports (font-variation-settings: normal) {
-            :root { font-family: InterVariable, sans-serif; }
+        /* Fluid layout styling and scrollbars */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #090B0E;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1F2937;
+            border-radius: 9999px;
+            border: 2px solid #090B0E;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent);
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body {
-            background-color: var(--bg-primary); color: var(--text-primary);
-            display: flex; flex-direction: column; min-height: 100vh;
-            overflow-x: hidden;
-        }
-        code, pre, .code-font { font-family: 'JetBrains Mono', monospace; }
-
-        /* Scrollbar */
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: var(--bg-primary); }
-        ::-webkit-scrollbar-thumb { background: var(--text-secondary); border-radius: var(--border-radius-pill); }
-        ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
-
-        /* --- Header --- */
-        header {
-            background-color: var(--bg-surface); padding: 1rem 1.5rem;
-            display: flex; justify-content: space-between; align-items: center;
-            border-bottom: 1px solid rgba(125, 133, 144, 0.15);
-            flex-wrap: wrap; gap: 1rem;
+        .glow-accent:focus-within {
+            box-shadow: 0 0 12px var(--accent-glow);
+            border-color: var(--neon-border) !important;
         }
 
-        .brand { display: flex; align-items: center; gap: 0.5rem; font-weight: 700; font-size: 1.5rem; }
-        .brand span { color: var(--accent); }
-        .nav-controls { display: flex; gap: 0.75rem; flex-wrap: wrap; }
-
-        /* Pills */
-        .btn {
-            background-color: transparent; color: var(--text-primary);
-            border: 1px solid var(--text-secondary); padding: 0.5rem 1rem;
-            border-radius: var(--border-radius-pill); cursor: pointer;
-            font-family: inherit; font-weight: 500; font-size: 0.9rem;
-            transition: all 0.2s ease; display: flex; align-items: center; gap: 0.5rem;
-            white-space: nowrap;
+        /* Emulated Web Viewport hardware transitions */
+        .emulated-viewport {
+            transform-origin: top left;
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), width 0.3s, height 0.3s, left 0.3s;
         }
-        .btn:hover { border-color: var(--text-primary); background-color: rgba(237, 239, 242, 0.05); }
+
+        .playground-textarea {
+            resize: none;
+            scrollbar-width: thin;
+        }
         
-        .btn-primary { background-color: var(--accent); color: var(--bg-primary); border: none; font-weight: 700; }
-        .btn-primary:hover { background-color: var(--accent-hover); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(212, 175, 55, 0.2); }
-
-        /* --- Workspace Layout --- */
-        main {
-            flex: 1; padding: 1rem; display: grid; gap: 1rem;
-            grid-template-columns: repeat(auto-fit, minmax(min(100%, 400px), 1fr));
-            align-content: start;
+        dialog::backdrop {
+            background: rgba(9, 11, 14, 0.85);
+            backdrop-filter: blur(8px);
         }
 
-        /* --- Frame Components --- */
-        .frame-card {
-            background-color: var(--bg-surface); border-radius: var(--border-radius-card);
-            display: flex; flex-direction: column; overflow: hidden;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); border: 1px solid rgba(125, 133, 144, 0.1);
-            height: clamp(450px, 65vh, 850px); 
-            transition: border-color 0.2s, box-shadow 0.2s;
-        }
-        .frame-card:hover { box-shadow: 0 6px 25px rgba(0, 0, 0, 0.5); border-color: rgba(212, 175, 55, 0.3); }
-
-        .frame-header {
-            display: flex; padding: 0.6rem 0.75rem; background-color: rgba(11, 14, 17, 0.8);
-            gap: 0.4rem; align-items: center; border-bottom: 1px solid rgba(125, 133, 144, 0.15);
-        }
-
-        .input-wrapper {
-            flex: 1; display: flex; min-width: 0;
-            background-color: var(--bg-primary); border: 1px solid rgba(125, 133, 144, 0.3);
-            border-radius: var(--border-radius-pill); overflow: hidden;
-            transition: border-color 0.2s;
-        }
-        .input-wrapper:focus-within { border-color: var(--accent); }
-
-        .url-input {
-            width: 100%; background: transparent; border: none; color: var(--text-primary);
-            padding: 0.5rem 1rem; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem;
-            outline: none; min-width: 0;
-        }
-
-        .proxy-toggle {
-            background: transparent; border: none; border-left: 1px solid rgba(125, 133, 144, 0.3);
-            color: var(--text-secondary); padding: 0 0.75rem; cursor: pointer;
-            display: flex; align-items: center; font-size: 0.75rem; font-weight: bold;
-            transition: all 0.2s;
-        }
-        .proxy-toggle.active { color: var(--bg-primary); background-color: var(--accent); }
-        .proxy-toggle:hover:not(.active) { color: var(--accent); background-color: rgba(212, 175, 55, 0.1); }
-
-        .icon-btn {
-            background: none; border: none; color: var(--text-secondary); cursor: pointer;
-            padding: 0.4rem; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            transition: all 0.2s; flex-shrink: 0;
-        }
-        .icon-btn:hover { color: var(--text-primary); background-color: rgba(237, 239, 242, 0.1); }
-        .icon-btn.close:hover { color: #ff4c4c; background-color: rgba(255, 76, 76, 0.1); }
-
-        .iframe-container { flex: 1; position: relative; background-color: #ffffff; }
-        iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; z-index: 2; background-color: white; }
-
-        .frame-overlay {
-            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            background: var(--bg-primary); color: var(--text-secondary); z-index: 1;
-            padding: 2rem; text-align: center; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem;
-        }
-
-        .spinner {
-            width: 24px; height: 24px; border: 3px solid rgba(212, 175, 55, 0.3);
-            border-top: 3px solid var(--accent); border-radius: 50%;
-            animation: spin 1s linear infinite; margin-bottom: 1rem; display: none;
-        }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        /* --- Footer --- */
-        footer {
-            background-color: var(--bg-surface); padding: 1.5rem; display: flex;
-            justify-content: space-between; align-items: center; border-top: 1px solid rgba(125, 133, 144, 0.15);
-            flex-wrap: wrap; gap: 1rem;
-        }
-        .credits { color: var(--text-secondary); font-size: 0.9rem; }
-        .credits span { color: var(--accent); font-weight: bold; }
-
-        @media (max-width: 600px) {
-            header, footer { flex-direction: column; justify-content: center; text-align: center; }
-            .nav-controls { justify-content: center; width: 100%; }
-            .btn { flex: 1; justify-content: center; }
-            .frame-header { flex-wrap: wrap; }
-            .input-wrapper { order: -1; min-width: 100%; margin-bottom: 0.5rem; }
+        /* Smooth tab transition */
+        .tab-btn.active {
+            border-color: var(--accent);
+            color: var(--accent);
+            background-color: rgba(197, 160, 89, 0.1);
         }
     </style>
 </head>
-<body>
+<body class="bg-[#090B0E] text-slate-100 min-h-screen flex flex-col font-sans transition-colors duration-300">
 
-    <header>
-        <div class="brand">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
-            Z<span>Frames</span>
+    <!-- Toast stack element for fully custom non-blocking UI alert systems -->
+    <div id="toast-container" class="fixed top-5 right-5 flex flex-col gap-2 pointer-events-none max-w-sm w-full z-[100000]"></div>
+
+    <header class="bg-[#12161A] border-b border-brand-darkBorder px-6 py-4 flex flex-wrap items-center justify-between gap-4 sticky top-0 z-50 shadow-lg">
+        <div class="flex items-center gap-3">
+            <div class="p-2.5 bg-gradient-to-br from-amber-500/20 to-yellow-600/10 rounded-xl border border-[#C5A059]/40 shadow-inner">
+                <svg class="w-6 h-6 text-[#C5A059]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="3" y1="9" x2="21" y2="9"></line>
+                    <line x1="9" y1="21" x2="9" y2="9"></line>
+                </svg>
+            </div>
+            <div>
+                <h1 class="text-xl font-black tracking-tight text-white flex items-center gap-1.5">
+                    Z<span class="text-[#C5A059] font-medium text-lg px-1.5 py-0.2 bg-[#C5A059]/10 rounded border border-[#C5A059]/20">FRAMES</span>
+                    <span class="text-xs text-slate-400 font-normal tracking-wide px-2 py-0.5 rounded-full bg-slate-800">v3.5 PRO</span>
+                </h1>
+                <p class="text-[10px] text-slate-400 font-mono">Multi-View Workspace & Developer Console • Powered by gemini-code-1781508778890.html</p>
+            </div>
         </div>
-        <div class="nav-controls">
-            <button class="btn btn-primary" onclick="addFrame()">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                Add Window
+
+        <!-- Global control configurations -->
+        <div class="flex items-center flex-wrap gap-2.5">
+            <!-- Dynamic Custom Themes Switcher -->
+            <div class="flex items-center bg-slate-800/80 rounded-full p-0.5 border border-slate-700">
+                <button onclick="setTheme('dracula')" class="px-2 py-1 text-xs rounded-full font-semibold transition hover:bg-slate-700/50" title="Dracula Dark">🧛</button>
+                <button onclick="setTheme('cyberpunk')" class="px-2 py-1 text-xs rounded-full font-semibold transition hover:bg-slate-700/50" title="Cyberpunk Neon">⚡</button>
+                <button onclick="setTheme('emerald')" class="px-2 py-1 text-xs rounded-full font-semibold transition hover:bg-slate-700/50" title="Emerald Forest">🌲</button>
+                <button onclick="setTheme('crimson')" class="px-2 py-1 text-xs rounded-full font-semibold transition hover:bg-slate-700/50" title="Crimson Midnight">🩸</button>
+                <button onclick="setTheme('classic')" class="px-2.5 py-1 text-xs rounded-full bg-[#C5A059] text-black font-bold transition" id="theme-indicator" title="Classic Gold">✨ Gold</button>
+            </div>
+
+            <!-- Workspace Templates dropdown menu -->
+            <div class="relative group">
+                <button class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs px-3.5 py-2.5 rounded-lg flex items-center gap-1.5 font-semibold text-slate-200 transition">
+                    <svg class="w-3.5 h-3.5 text-amber-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                    Workspace Profiles
+                </button>
+                <div class="absolute right-0 top-full mt-1.5 w-60 bg-slate-900 border border-slate-750 rounded-xl shadow-2xl overflow-hidden hidden group-hover:block z-[999]">
+                    <div class="p-2 border-b border-slate-800 bg-slate-950 text-[11px] uppercase font-bold tracking-wider text-slate-400">Standard Templates</div>
+                    <button onclick="loadTemplate('dev-duo')" class="w-full text-left px-4 py-2.5 text-xs text-slate-300 hover:bg-slate-850 flex items-center justify-between border-b border-slate-800/50">
+                        <span>👥 Dev Duo Monitor</span>
+                        <span class="text-[10px] bg-emerald-500/10 text-emerald-400 px-1.5 py-0.5 rounded">2 Views</span>
+                    </button>
+                    <button onclick="loadTemplate('sandbox-suite')" class="w-full text-left px-4 py-2.5 text-xs text-slate-300 hover:bg-slate-850 flex items-center justify-between border-b border-slate-800/50">
+                        <span>🧪 Sandbox & Scratchpad</span>
+                        <span class="text-[10px] bg-indigo-500/10 text-indigo-400 px-1.5 py-0.5 rounded">Triple</span>
+                    </button>
+                    <button onclick="loadTemplate('full-deck')" class="w-full text-left px-4 py-2.5 text-xs text-slate-300 hover:bg-slate-850 flex items-center justify-between border-b border-slate-800/50">
+                        <span>🎛️ Comprehensive Suite</span>
+                        <span class="text-[10px] bg-pink-500/10 text-pink-400 px-1.5 py-0.5 rounded">4 Views</span>
+                    </button>
+                    <div class="p-2 border-t border-b border-slate-800 bg-slate-950 text-[11px] uppercase font-bold tracking-wider text-slate-400">Custom User Profiles</div>
+                    <div id="custom-workspaces-list" class="max-h-36 overflow-y-auto">
+                        <!-- Populated dynamically via state scripts -->
+                    </div>
+                    <div class="p-2 border-t border-slate-800 bg-slate-950 flex gap-1">
+                        <input id="new-workspace-name" type="text" placeholder="Profile name..." class="flex-1 bg-slate-900 border border-slate-700 text-[10px] px-2 py-1 rounded text-white focus:outline-none focus:border-[#C5A059]">
+                        <button onclick="saveCurrentWorkspace()" class="bg-[#C5A059] text-black font-extrabold text-[10px] px-2 py-1 rounded hover:bg-amber-500 transition">Save Slot</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Global Action Options -->
+            <button onclick="openDiagnostics()" class="bg-slate-800 hover:bg-slate-750 border border-slate-700 text-xs px-3.5 py-2.5 rounded-lg flex items-center gap-1.5 text-slate-300 transition" title="Troubleshoot blocked frames">
+                <svg class="w-3.5 h-3.5 text-cyan-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                Diag
             </button>
+
+            <button onclick="openDocs()" class="bg-slate-800 hover:bg-slate-750 border border-slate-700 text-xs px-3.5 py-2.5 rounded-lg flex items-center gap-1.5 text-slate-300 transition">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                Docs
+            </button>
+
+            <button onclick="globalRefresh()" class="bg-slate-800 hover:bg-slate-750 border border-slate-700 text-xs px-3.5 py-2.5 rounded-lg text-slate-300 flex items-center gap-1 transition" title="Reload all dynamic view ports">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"></path><path d="M23 4v6h-6"></path></svg>
+                Refresh All
+            </button>
+
+            <button onclick="clearWorkspace()" class="bg-red-950/40 hover:bg-red-900/60 border border-red-900/50 text-xs px-3.5 py-2.5 rounded-lg text-red-300 flex items-center gap-1 transition" title="Wipe canvas boards">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                Wipe Workspace
+            </button>
+
+            <!-- Creative Action Split Dropdown Trigger -->
+            <div class="relative group">
+                <button class="bg-[#C5A059] hover:bg-[#D6B26A] text-black font-extrabold text-xs px-4 py-2.5 rounded-lg flex items-center gap-1.5 transition shadow-lg shadow-amber-500/10">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    New Window
+                </button>
+                <div class="absolute right-0 top-full mt-1.5 w-56 bg-slate-900 border border-slate-750 rounded-xl shadow-2xl overflow-hidden hidden group-hover:block z-[999]">
+                    <button onclick="addFrame('iframe', {url: 'https://example.com'})" class="w-full text-left px-4 py-2.5 text-xs text-slate-300 hover:bg-slate-800 flex items-center gap-2 border-b border-slate-800/50">
+                        <span class="text-amber-500">🌐</span> Web Iframe Monitor
+                    </button>
+                    <button onclick="addFrame('playground')" class="w-full text-left px-4 py-2.5 text-xs text-slate-300 hover:bg-slate-800 flex items-center gap-2 border-b border-slate-800/50">
+                        <span class="text-blue-500">🧪</span> HTML / Tailwind Sandbox
+                    </button>
+                    <button onclick="addFrame('notes')" class="w-full text-left px-4 py-2.5 text-xs text-slate-300 hover:bg-slate-800 flex items-center gap-2 border-b border-slate-800/50">
+                        <span class="text-emerald-500">📝</span> Scratchpad Sticky
+                    </button>
+                    <button onclick="addFrame('devtools')" class="w-full text-left px-4 py-2.5 text-xs text-slate-300 hover:bg-slate-800 flex items-center gap-2">
+                        <span class="text-indigo-400">🛠️</span> Developer Utility Kit
+                    </button>
+                </div>
+            </div>
         </div>
     </header>
 
-    <main id="workspace"></main>
+    <section class="bg-[#0e1216] border-b border-slate-800 px-6 py-2.5 flex flex-wrap items-center justify-between gap-4 text-xs">
+        <div class="flex items-center gap-4 flex-wrap">
+            <span class="text-slate-400 font-medium">Grid Columns:</span>
+            <div class="flex bg-slate-950 p-1 rounded-lg border border-slate-800 gap-1">
+                <button onclick="updateGridColumns('auto')" class="px-2.5 py-1 rounded bg-slate-800 text-[#C5A059] font-bold" id="btn-col-auto">Auto-Flow</button>
+                <button onclick="updateGridColumns('1')" class="px-2.5 py-1 rounded text-slate-400 hover:text-white" id="btn-col-1">1 Col</button>
+                <button onclick="updateGridColumns('2')" class="px-2.5 py-1 rounded text-slate-400 hover:text-white" id="btn-col-2">2 Cols</button>
+                <button onclick="updateGridColumns('3')" class="px-2.5 py-1 rounded text-slate-400 hover:text-white" id="btn-col-3">3 Cols</button>
+                <button onclick="updateGridColumns('4')" class="px-2.5 py-1 rounded text-slate-400 hover:text-white" id="btn-col-4">4 Cols</button>
+            </div>
 
-    <footer>
-        <div class="credits">Developed & Designed by <span>Zelvior</span></div>
+            <div class="h-4 w-[1px] bg-slate-800"></div>
+
+            <span class="text-slate-400 font-medium">Card Gap:</span>
+            <input type="range" min="4" max="32" value="16" class="w-24 accent-[#C5A059]" id="grid-gap-slider" oninput="adjustGridGap(this.value)">
+            <span id="gap-value" class="font-mono text-[10px] text-slate-500">16px</span>
+        </div>
+
+        <div class="flex items-center gap-4 text-slate-400">
+            <div class="flex items-center gap-2 bg-slate-950 px-3 py-1 rounded-full border border-slate-850">
+                <span class="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></span>
+                <span>Active views: <strong id="stats-active-frames" class="text-white">0</strong></span>
+            </div>
+            <div class="flex items-center gap-2 bg-slate-950 px-3 py-1 rounded-full border border-slate-850">
+                <span>CORS Proxy:</span>
+                <select id="cors-proxy-select" class="bg-transparent border-none text-[#C5A059] font-bold py-0.5 focus:outline-none cursor-pointer">
+                    <option value="none">Disabled (Direct)</option>
+                    <option value="allorigins">AllOrigins API Relay</option>
+                    <option value="corsanywhere">CORS-Anywhere Relay</option>
+                </select>
+            </div>
+        </div>
+    </section>
+
+    <main class="flex-1 p-6 flex flex-col min-h-0">
+        <!-- Main dynamic component grid container -->
+        <div id="workspace" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 items-stretch w-full flex-1">
+            <!-- Rendered programmatically via engine scripts -->
+        </div>
+
+        <!-- Empty state placeholder visual fallback -->
+        <div id="empty-workspace-state" class="hidden flex-1 flex flex-col items-center justify-center text-center p-12 max-w-lg mx-auto py-24">
+            <div class="w-20 h-20 mb-6 rounded-3xl bg-slate-900 border border-slate-800 flex items-center justify-center text-3xl shadow-lg">
+                🗖
+            </div>
+            <h2 class="text-xl font-bold mb-2">No Windows Active</h2>
+            <p class="text-slate-400 text-sm mb-6 leading-relaxed">
+                Add responsive browser monitors, playground code screens, diagnostic systems, or stickies to start compiling.
+            </p>
+            <div class="flex gap-2 flex-wrap justify-center">
+                <button onclick="addFrame('iframe', {url: 'https://example.com'})" class="px-4 py-2 bg-amber-500/10 text-amber-400 border border-amber-500/20 rounded-lg hover:bg-amber-500/20 text-xs font-semibold transition">
+                    + Web Frame
+                </button>
+                <button onclick="addFrame('playground')" class="px-4 py-2 bg-blue-500/10 text-blue-400 border border-blue-500/20 rounded-lg hover:bg-blue-500/20 text-xs font-semibold transition">
+                    + HTML Sandbox
+                </button>
+                <button onclick="addFrame('notes')" class="px-4 py-2 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-lg hover:bg-emerald-500/20 text-xs font-semibold transition">
+                    + Sticky Scratchpad
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <dialog id="diagnosticsModal" class="m-auto bg-slate-900 border border-slate-800 rounded-2xl p-6 text-slate-100 max-w-2xl w-[95%] shadow-2xl">
+        <div class="flex justify-between items-start border-b border-slate-800 pb-4 mb-4">
+            <div>
+                <h2 class="text-lg font-bold text-[#C5A059] flex items-center gap-2">
+                    🛠️ ZFrames Web Iframe Diagnostician
+                </h2>
+                <p class="text-xs text-slate-400 mt-1">Determine compatibility and proxy availability for targeted websites.</p>
+            </div>
+            <button onclick="closeDiagnostics()" class="p-1 rounded-full text-slate-400 hover:bg-slate-800 hover:text-white transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+        </div>
+
+        <div class="space-y-4">
+            <div class="bg-slate-950 p-4 rounded-xl border border-slate-800/80">
+                <label class="block text-xs font-semibold text-slate-400 uppercase mb-2">Check Iframe Compatibility</label>
+                <div class="flex gap-2">
+                    <input type="text" id="diag-url-input" placeholder="https://wikipedia.org" class="flex-1 bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-[#C5A059]">
+                    <button onclick="runDiagTest()" class="bg-[#C5A059] text-black font-extrabold text-xs px-4 py-2 rounded-lg hover:bg-amber-400 transition">Test Compatibility</button>
+                </div>
+                <div id="diag-result" class="mt-3 text-xs p-3 rounded-lg hidden"></div>
+            </div>
+
+            <div class="space-y-2 text-xs">
+                <h3 class="font-bold text-slate-300">Why do some web pages appear empty or refuse to connect?</h3>
+                <p class="text-slate-400 leading-relaxed">
+                    Security-focused sites like <span class="font-mono text-amber-500">Google, GitHub, and Facebook</span> issue strict security instructions including <span class="font-mono text-rose-400">X-Frame-Options: SAMEORIGIN</span> headers. This prevents unauthorized web frames from nesting their components.
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-3">
+                    <div class="bg-slate-950 p-3 rounded-lg border border-slate-850">
+                        <h4 class="font-bold text-emerald-400 mb-1">💡 Solution 1: Use Play Yards</h4>
+                        <p class="text-slate-500 text-[11px]">Deploy local HTML/CSS sandboxes inside our application canvas. These run entirely within local sandboxed viewports without blockages!</p>
+                    </div>
+                    <div class="bg-slate-950 p-3 rounded-lg border border-slate-850">
+                        <h4 class="font-bold text-amber-400 mb-1">💡 Solution 2: Proxy Relays</h4>
+                        <p class="text-slate-500 text-[11px]">Switch the top-bar CORS proxy config to parse target elements with dedicated intermediate scrapers.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </dialog>
+
+    <dialog id="docsModal" class="m-auto bg-slate-900 border border-slate-800 rounded-2xl p-6 text-slate-100 max-w-2xl w-[95%] shadow-2xl">
+        <div class="flex justify-between items-center border-b border-slate-800 pb-4 mb-4">
+            <h2 class="text-lg font-bold text-[#C5A059]">ZFrames v3.5 Documentation Handbook</h2>
+            <button onclick="closeDocs()" class="p-1 rounded-full text-slate-400 hover:bg-slate-800 hover:text-white transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+        </div>
+
+        <div class="space-y-4 text-xs leading-relaxed overflow-y-auto max-h-[70vh]">
+            <div>
+                <h3 class="text-slate-200 font-bold text-sm mb-1.5">What is ZFrames?</h3>
+                <p class="text-slate-400 font-sans">
+                    ZFrames is a high-performance grid-based developer desktop simulator built to facilitate multitasking and side-by-side API component analysis. You can create modular, interactive windows, check compatibility, and write scratchpad notes simultaneously.
+                </p>
+            </div>
+
+            <div>
+                <h3 class="text-slate-200 font-bold text-sm mb-1.5">Modular Window Capabilities</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div class="p-3 bg-slate-950 rounded-lg border border-slate-800">
+                        <strong class="text-amber-400 block mb-1">🌐 Web Iframe Monitor</strong>
+                        Embed live URLs. Instantly toggle hardware device emulation models (Desktop, Tablet, Mobile) to trigger responsive media-queries directly!
+                    </div>
+                    <div class="p-3 bg-slate-950 rounded-lg border border-slate-800">
+                        <strong class="text-blue-400 block mb-1">🧪 HTML Sandbox</strong>
+                        Write responsive mockups using pure markup, custom styles, and Tailwind configurations instantly.
+                    </div>
+                    <div class="p-3 bg-slate-950 rounded-lg border border-slate-800">
+                        <strong class="text-emerald-400 block mb-1">📝 Developer Sticky</strong>
+                        Store reference links, snippets, terminal variables, or lists. Saved securely across session reloads.
+                    </div>
+                    <div class="p-3 bg-slate-950 rounded-lg border border-slate-800">
+                        <strong class="text-indigo-400 block mb-1">🛠️ Utility Toolset</strong>
+                        Provides active conversion utilities like base64 processing, JSON parsing, URL transformation, and regex checks instantly inside the grid.
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <h3 class="text-slate-200 font-bold text-sm mb-1">Device Emulation Scaling</h3>
+                <p class="text-slate-400">
+                    When you select fixed responsive targets like <span class="font-bold text-white">Desktop</span>, <span class="font-bold text-white">Tablet</span>, or <span class="font-bold text-white">Mobile</span>, the workspace calculations down-scale the nested viewport content utilizing CSS matrix transformations, fitting actual screen widths seamlessly.
+                </p>
+            </div>
+
+            <div class="p-3 bg-slate-950 rounded-lg border border-slate-800">
+                <h3 class="text-slate-200 font-bold mb-1 text-[#C5A059]">License & Credits</h3>
+                <p class="text-slate-400 font-mono">
+                    Developed & designed by <strong>Zelvior</strong> from Pakistan. Offered under Apache License 2.0. Feel free to copy, modify, and redistribute! Refer to core templates of gemini-code-1781508778890.html.
+                </p>
+            </div>
+        </div>
+    </dialog>
+
+    <footer class="bg-[#12161A] border-t border-brand-darkBorder px-6 py-4 flex flex-wrap justify-between items-center text-xs gap-4 mt-auto">
+        <div class="text-slate-400">
+            Powered by <span class="text-[#C5A059] font-bold">ZFrames Multi-Core Engine v3.5</span> • Developed by <span class="font-bold text-slate-200">Zelvior</span> from Pakistan 🇵🇰
+        </div>
+        
+        <div class="flex items-center gap-4">
+            <a href="https://web.sketchub.in/u/Zelvior/" target="_blank" class="text-slate-400 hover:text-[#C5A059] flex items-center gap-1.5 transition">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                Sketchub
+            </a>
+            <a href="mailto:Zelvior@proton.me" class="text-slate-400 hover:text-[#C5A059] flex items-center gap-1.5 transition">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                Email Support
+            </a>
+            <a href="https://youtube.com/@zelviorhere" target="_blank" class="text-slate-400 hover:text-[#C5A059] flex items-center gap-1.5 transition">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33 2.78 2.78 0 0 0 1.94 2c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.33 29 29 0 0 0-.46-5.33z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02" fill="currentColor"/></svg>
+                YouTube
+            </a>
+            <a href="https://zelvior.blogspot.com/" target="_blank" class="text-slate-400 hover:text-[#C5A059] flex items-center gap-1.5 transition">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                Blog
+            </a>
+        </div>
     </footer>
 
     <script>
         const workspace = document.getElementById('workspace');
+        const emptyState = document.getElementById('empty-workspace-state');
+        const customWorkspaceList = document.getElementById('custom-workspaces-list');
+        const diagUrlInput = document.getElementById('diag-url-input');
+        const diagResult = document.getElementById('diag-result');
 
-        document.addEventListener('DOMContentLoaded', () => { addFrame(); });
+        // Dynamic workspace memory state
+        let framesList = [];
 
-        function addFrame() {
-            const frameId = `frame-${Date.now()}`;
+        // Application themes database
+        const themes = {
+            classic: {
+                accent: '#C5A059',
+                accentGlow: 'rgba(197, 160, 89, 0.15)',
+                accentHover: '#D6B26A',
+                neonBorder: 'rgba(197, 160, 89, 0.3)',
+                indicatorText: '✨ Gold'
+            },
+            dracula: {
+                accent: '#bd93f9',
+                accentGlow: 'rgba(189, 147, 249, 0.2)',
+                accentHover: '#ff79c6',
+                neonBorder: 'rgba(189, 147, 249, 0.4)',
+                indicatorText: '🧛 Dracula'
+            },
+            cyberpunk: {
+                accent: '#00f0ff',
+                accentGlow: 'rgba(0, 240, 255, 0.2)',
+                accentHover: '#ff0055',
+                neonBorder: 'rgba(0, 240, 255, 0.4)',
+                indicatorText: '⚡ Cyber'
+            },
+            emerald: {
+                accent: '#10b981',
+                accentGlow: 'rgba(16, 185, 129, 0.15)',
+                accentHover: '#34d399',
+                neonBorder: 'rgba(16, 185, 129, 0.3)',
+                indicatorText: '🌲 Pine'
+            },
+            crimson: {
+                accent: '#ef4444',
+                accentGlow: 'rgba(239, 68, 68, 0.15)',
+                accentHover: '#f87171',
+                neonBorder: 'rgba(239, 68, 68, 0.3)',
+                indicatorText: '🩸 Blood'
+            }
+        };
+
+        // Layout presets templates configuration
+        const templates = {
+            'dev-duo': [
+                { type: 'iframe', url: 'https://example.com', title: 'Window Alpha', device: 'free', sandbox: ['allow-scripts', 'allow-same-origin', 'allow-forms'] },
+                { type: 'iframe', url: 'https://wikipedia.org', title: 'Window Beta', device: 'mobile', sandbox: ['allow-scripts', 'allow-same-origin'] }
+            ],
+            'sandbox-suite': [
+                { type: 'playground', title: 'Responsive Play Yard Mockup', playgroundCode: '<!-- Code sandbox -->\n<div class="bg-indigo-950 text-white p-6 rounded-xl border border-indigo-500/30 shadow-lg">\n  <h1 class="text-2xl font-black text-indigo-400">Hello from ZFrames!</h1>\n  <p class="text-indigo-200 mt-2 text-xs">Verify your components instantly inside a local sandbox frame.</p>\n</div>' },
+                { type: 'iframe', url: 'https://example.com', title: 'Example Check', device: 'free', sandbox: ['allow-scripts', 'allow-same-origin'] },
+                { type: 'notes', title: 'Scratchpad Tasks List', notesContent: 'OPERATIONAL LOGS:\n- Test dynamic code rendering\n- Verify emulated viewports on mobile layouts\n- Troubleshoot iframe connection issues' }
+            ],
+            'full-deck': [
+                { type: 'iframe', url: 'https://example.com', title: 'Monitor Alpha', device: 'free', sandbox: ['allow-scripts'] },
+                { type: 'playground', title: 'Sandbox Playground', playgroundCode: '<div class="p-4 bg-emerald-950 text-emerald-400 rounded-lg border border-emerald-800">HTML Playback System Active</div>' },
+                { type: 'notes', title: 'Active Scratchpad', notesContent: 'Ref: gemini-code-1781508778890.html' },
+                { type: 'devtools', title: 'Workspace Converter' }
+            ]
+        };
+
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            if (!container) return;
+
+            const toast = document.createElement('div');
+            toast.className = 'p-3.5 rounded-xl border text-xs font-semibold shadow-xl flex items-center justify-between gap-3 pointer-events-auto transform translate-y-2 opacity-0 transition-all duration-300 bg-slate-900 border-slate-700';
+            
+            let icon = '✨';
+            if (type === 'error') {
+                icon = '❌';
+                toast.classList.add('border-red-900/50', 'text-red-300');
+            } else if (type === 'info') {
+                icon = 'ℹ️';
+                toast.classList.add('border-cyan-900/50', 'text-cyan-300');
+            } else {
+                icon = '✅';
+                toast.classList.add('border-emerald-900/50', 'text-emerald-300');
+            }
+
+            toast.innerHTML = `
+                <div class="flex items-center gap-2">
+                    <span>${icon}</span>
+                    <span>${message}</span>
+                </div>
+                <button class="text-slate-400 hover:text-white transition" onclick="this.parentElement.remove()">&times;</button>
+            `;
+
+            container.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.classList.remove('translate-y-2', 'opacity-0');
+            }, 50);
+
+            // Self-dismissal timers
+            setTimeout(() => {
+                if (toast.parentNode) {
+                    toast.classList.add('translate-y-2', 'opacity-0');
+                    setTimeout(() => toast.remove(), 300);
+                }
+            }, 4000);
+        }
+
+        function addFrame(type = 'iframe', initialData = {}) {
+            const frameId = `f-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
             const card = document.createElement('div');
-            card.className = 'frame-card';
+            card.className = 'bg-[#12161A] border border-slate-800 rounded-xl flex flex-col shadow-xl min-h-[440px] max-w-full overflow-hidden transition-all duration-300 hover:border-slate-700/80';
             card.id = frameId;
+            card.dataset.type = type;
+
+            const title = initialData.title || (
+                type === 'iframe' ? 'Iframe Web Monitor' : 
+                type === 'playground' ? 'HTML Live Playground' : 
+                type === 'notes' ? 'Scratchpad Note' : 'Utility Toolset'
+            );
+            const url = initialData.url || 'https://example.com';
+            const device = initialData.device || 'free';
+            const defaultSandbox = initialData.sandbox || ['allow-scripts', 'allow-same-origin', 'allow-forms', 'allow-popups'];
+            const notesContent = initialData.notesContent || 'Welcome to your Scratchpad!\n\n- Store commands or configurations.\n- All contents autosave locally.';
+            const playgroundCode = initialData.playgroundCode || `<!-- Write live components below -->\n<div class="p-6 bg-[#0e1216] text-slate-100 rounded-xl border border-slate-800">\n  <h2 class="text-xl font-black text-amber-400">Sandbox Playground 🚀</h2>\n  <p class="text-slate-400 mt-1.5 text-xs">Run markup securely inside a clean browser environment.</p>\n  <button class="mt-4 bg-amber-500 hover:bg-amber-400 text-black px-4 py-2 text-xs font-bold rounded-lg transition" onclick="console.log('Sandbox Action Executed!')">Action Test</button>\n</div>`;
+
+            // Prepare header elements safely to prevent unclosed template literal bugs
+            let headerControls = '';
+            if (type === 'iframe') {
+                headerControls = `
+                    <div class="flex items-center gap-1 bg-slate-950 p-1 rounded-lg border border-slate-800 flex-1 min-w-[200px]">
+                        <input type="url" class="url-input bg-transparent w-full border-none text-[11px] text-white font-mono focus:outline-none px-2" value="${url}" placeholder="Input url & hit enter..." onkeydown="handleFrameUrlInput(event, '${frameId}')">
+                        <button onclick="triggerLoadUrl('${frameId}')" class="p-1 rounded text-slate-400 hover:text-white hover:bg-slate-800 transition" title="Go to URL">➔</button>
+                    </div>
+                    <div class="flex items-center gap-1">
+                        <select onchange="updateEmulationMode('${frameId}', this.value)" class="bg-slate-900 border border-slate-700 text-[10px] py-1 px-2 rounded focus:outline-none text-slate-300 cursor-pointer" title="Viewport Emulation Mode">
+                            <option value="free" ${device === 'free' ? 'selected' : ''}>Freeflow</option>
+                            <option value="desktop" ${device === 'desktop' ? 'selected' : ''}>Desktop (1280px)</option>
+                            <option value="tablet" ${device === 'tablet' ? 'selected' : ''}>Tablet (768px)</option>
+                            <option value="mobile" ${device === 'mobile' ? 'selected' : ''}>Mobile (375px)</option>
+                        </select>
+                    </div>
+                `;
+            } else {
+                headerControls = `
+                    <input type="text" value="${title}" onchange="updateFrameTitle('${frameId}', this.value)" class="bg-slate-950 border border-slate-850 px-2.5 py-1 text-xs text-white rounded font-semibold w-full focus:outline-none focus:border-slate-700">
+                `;
+            }
+
+            // Construct Inner Frame Elements separately to prevent syntax and formatting bugs
+            let contentSurfaceHtml = '';
+            if (type === 'iframe') {
+                contentSurfaceHtml = `
+                    <!-- IFRAME CONTAINER -->
+                    <div class="absolute inset-0 flex items-center justify-center p-6 text-center text-slate-500 text-xs font-mono select-none animate-pulse" id="loader-notice-${frameId}">
+                        <div>
+                            <p class="text-sm font-bold text-slate-400">Loading Web Frame Viewport...</p>
+                            <p class="text-[10px] mt-1 text-slate-600">If page remains blank, strict CSP policies could be active.</p>
+                        </div>
+                    </div>
+                    <iframe id="iframe-${frameId}" class="w-full h-full border-none absolute inset-0 bg-white emulated-viewport" src="about:blank" sandbox="${defaultSandbox.join(' ')}"></iframe>
+                `;
+            } else if (type === 'playground') {
+                contentSurfaceHtml = `
+                    <!-- PLAYGROUND SPLIT SCREEN ENGINE -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 w-full h-full items-stretch min-h-[350px]">
+                        <div class="flex flex-col border-r border-slate-850 bg-[#0c0f12]">
+                            <div class="bg-slate-950 px-3 py-1.5 border-b border-slate-850 flex items-center justify-between text-[11px] text-slate-400">
+                                <span class="font-mono text-[10px] tracking-wide text-indigo-400">HTML Input (Tailwind Loaded)</span>
+                                <button onclick="updatePlaygroundPreview('${frameId}')" class="bg-blue-600 hover:bg-blue-500 text-white font-extrabold px-2.5 py-0.5 rounded text-[10px] transition">Compile ➔</button>
+                            </div>
+                            <textarea id="text-playground-${frameId}" class="flex-1 w-full h-full min-h-[250px] bg-[#0d1013] text-emerald-400 font-mono text-[11px] p-3 focus:outline-none border-none playground-textarea leading-relaxed" placeholder="Type component HTML/CSS here...">${playgroundCode}</textarea>
+                        </div>
+                        <div class="flex flex-col bg-white relative min-h-[250px]">
+                            <div class="bg-slate-200 px-3 py-1 border-b border-slate-300 text-[10px] text-slate-600 font-extrabold select-none">Live Sandboxed View</div>
+                            <div class="flex-1 relative w-full h-full">
+                                <iframe id="iframe-playground-${frameId}" class="absolute inset-0 w-full h-full border-none bg-white"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else if (type === 'notes') {
+                contentSurfaceHtml = `
+                    <!-- STICKY NOTE TEXT AREA -->
+                    <div class="flex flex-col w-full h-full bg-[#161a22]/30 min-h-[300px]">
+                        <div class="bg-slate-950/60 px-3 py-1.5 border-b border-slate-850 flex items-center justify-between text-[10px] text-slate-400 font-mono">
+                            <span>Scratchpad Memory Stack</span>
+                            <span class="text-emerald-500">🟢 Live Saved</span>
+                        </div>
+                        <textarea id="notes-${frameId}" oninput="autoSaveWorkspaceState()" class="flex-1 p-4 bg-transparent text-slate-200 font-sans text-xs leading-relaxed focus:outline-none resize-none h-full" placeholder="Put checklists, configurations, or useful codes here...">${notesContent}</textarea>
+                    </div>
+                `;
+            } else if (type === 'devtools') {
+                contentSurfaceHtml = `
+                    <!-- DEVELOPER DEVTOOLS CARD -->
+                    <div class="flex flex-col w-full h-full bg-[#0d1013] min-h-[350px] p-4 text-xs font-mono text-slate-300 space-y-3">
+                        <div class="flex border-b border-slate-800 pb-2">
+                            <button onclick="toggleDevTab(event, '${frameId}', 'json')" class="tab-btn active px-3 py-1 rounded-l border border-slate-700 text-[11px]">JSON Format</button>
+                            <button onclick="toggleDevTab(event, '${frameId}', 'base64')" class="tab-btn px-3 py-1 border-y border-r border-slate-700 text-[11px]">Base64</button>
+                            <button onclick="toggleDevTab(event, '${frameId}', 'url')" class="tab-btn px-3 py-1 border-y border-r border-slate-700 text-[11px]">URL</button>
+                            <button onclick="toggleDevTab(event, '${frameId}', 'regex')" class="tab-btn px-3 py-1 rounded-r border border-slate-700 text-[11px]">RegEx</button>
+                        </div>
+                        
+                        <!-- Tabs Content Panel -->
+                        <div id="dev-panel-json-${frameId}" class="dev-panel space-y-2">
+                            <textarea id="dev-json-input-${frameId}" placeholder="Paste raw JSON here..." class="w-full h-24 bg-slate-950 border border-slate-800 p-2 text-[10px] rounded focus:outline-none"></textarea>
+                            <div class="flex gap-1.5">
+                                <button onclick="processDevTools('${frameId}', 'json-beautify')" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-2.5 py-1 rounded text-[10px]">Beautify</button>
+                                <button onclick="processDevTools('${frameId}', 'json-minify')" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-2.5 py-1 rounded text-[10px]">Minify</button>
+                            </div>
+                        </div>
+
+                        <div id="dev-panel-base64-${frameId}" class="dev-panel space-y-2 hidden">
+                            <textarea id="dev-base64-input-${frameId}" placeholder="Enter text to Encode/Decode..." class="w-full h-24 bg-slate-950 border border-slate-800 p-2 text-[10px] rounded focus:outline-none"></textarea>
+                            <div class="flex gap-1.5">
+                                <button onclick="processDevTools('${frameId}', 'b64-encode')" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-2.5 py-1 rounded text-[10px]">Encode</button>
+                                <button onclick="processDevTools('${frameId}', 'b64-decode')" class="bg-amber-600 hover:bg-amber-500 text-black font-extrabold px-2.5 py-1 rounded text-[10px]">Decode</button>
+                            </div>
+                        </div>
+
+                        <div id="dev-panel-url-${frameId}" class="dev-panel space-y-2 hidden">
+                            <textarea id="dev-url-input-${frameId}" placeholder="Enter string..." class="w-full h-24 bg-slate-950 border border-slate-800 p-2 text-[10px] rounded focus:outline-none"></textarea>
+                            <div class="flex gap-1.5">
+                                <button onclick="processDevTools('${frameId}', 'url-encode')" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-2.5 py-1 rounded text-[10px]">URL Encode</button>
+                                <button onclick="processDevTools('${frameId}', 'url-decode')" class="bg-amber-600 hover:bg-amber-500 text-black font-extrabold px-2.5 py-1 rounded text-[10px]">URL Decode</button>
+                            </div>
+                        </div>
+
+                        <div id="dev-panel-regex-${frameId}" class="dev-panel space-y-2 hidden">
+                            <input id="dev-regex-pattern-${frameId}" type="text" placeholder="Regex Pattern (e.g. [A-Z])" class="w-full bg-slate-950 border border-slate-800 p-1.5 text-[10px] rounded focus:outline-none" />
+                            <textarea id="dev-regex-input-${frameId}" placeholder="Test string..." class="w-full h-16 bg-slate-950 border border-slate-800 p-2 text-[10px] rounded focus:outline-none"></textarea>
+                            <div class="flex gap-1.5 items-center">
+                                <button onclick="processDevTools('${frameId}', 'regex-match')" class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-2.5 py-1 rounded text-[10px]">Check Pattern</button>
+                                <span id="dev-regex-res-${frameId}" class="text-[10px] font-bold text-slate-400"></span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            let iframeFooter = '';
+            if (type === 'iframe') {
+                iframeFooter = `
+                    <div class="bg-slate-950 px-4 py-2 border-t border-slate-900 flex justify-between items-center text-[10px] text-slate-500 font-mono">
+                        <div>Viewport: <span id="res-val-${frameId}" class="text-slate-300 font-bold">Freeflow</span></div>
+                        <div class="flex gap-2">
+                            <button onclick="configureSandboxModal('${frameId}')" class="hover:text-white transition">Config Sandbox ⚙️</button>
+                        </div>
+                    </div>
+                `;
+            }
+
+            let iframeReloadBtn = '';
+            if (type === 'iframe') {
+                iframeReloadBtn = `
+                    <button onclick="reloadFrame('${frameId}')" class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition" title="Refresh Page">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"></path><path d="M23 4v6h-6"></path></svg>
+                    </button>
+                `;
+            }
 
             card.innerHTML = `
-                <div class="frame-header">
-                    <button class="icon-btn" onclick="refreshFrame('${frameId}')" title="Refresh">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
-                    </button>
-                    <div class="input-wrapper">
-                        <input type="text" class="url-input" placeholder="Search or type URL..." onkeydown="handleEnter(event, '${frameId}')">
-                        <button class="proxy-toggle" onclick="toggleProxy(this, '${frameId}')" title="Toggle Proxy if site refuses to connect">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:4px"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-                            PROXY
-                        </button>
+                <!-- Frame Header controls toolbar -->
+                <div class="flex flex-wrap items-center justify-between p-3 border-b border-slate-800 gap-2 bg-[#0e1216]">
+                    <div class="flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 rounded-full ${
+                            type === 'iframe' ? 'bg-amber-500' : 
+                            type === 'playground' ? 'bg-blue-500' : 
+                            type === 'notes' ? 'bg-emerald-500' : 'bg-indigo-500'
+                        }"></span>
+                        <span class="text-xs font-bold text-slate-400 tracking-wider font-mono">${type.toUpperCase()}</span>
                     </div>
-                    <button class="icon-btn" onclick="triggerLoad('${frameId}')" title="Go">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-                    </button>
-                    <button class="icon-btn close" onclick="removeFrame('${frameId}')" title="Close Window">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                    </button>
-                </div>
-                <div class="iframe-container">
-                    <div class="frame-overlay" id="overlay-${frameId}">
-                        <div class="spinner" id="spinner-${frameId}"></div>
-                        <span id="status-${frameId}">Type a web address or search query to begin.<br><br><span style="color:var(--text-secondary); font-size: 0.85em;">Using native IP. If screen stays blank, click PROXY.</span></span>
+                    <div class="flex flex-1 items-center justify-end gap-2">
+                        ${headerControls}
+                        
+                        <div class="flex items-center gap-0.5 border-l border-slate-800 pl-2">
+                            ${iframeReloadBtn}
+                            <button onclick="toggleMaximizeFrame('${frameId}')" class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition" title="Maximize Card">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect></svg>
+                            </button>
+                            <button onclick="removeFrame('${frameId}')" class="p-1.5 rounded-lg text-slate-400 hover:text-red-400 hover:bg-red-950/40 transition" title="Delete Frame">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                            </button>
+                        </div>
                     </div>
-                    <iframe id="iframe-${frameId}" src="" 
-                            sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-modals allow-popups-to-escape-sandbox" 
-                            onload="frameLoaded('${frameId}')">
-                    </iframe>
                 </div>
+
+                <!-- Frame Content Display Surface -->
+                <div class="flex-1 relative bg-slate-950 w-full overflow-auto flex items-stretch justify-start min-h-[350px]" id="view-container-${frameId}">
+                    ${contentSurfaceHtml}
+                </div>
+
+                <!-- Web Frame details footer bar -->
+                ${iframeFooter}
             `;
+
             workspace.appendChild(card);
-            card.querySelector('.url-input').focus();
+            
+            // Record state variables in internal state stack
+            framesList.push({
+                id: frameId,
+                type: type,
+                url: url,
+                device: device,
+                sandbox: defaultSandbox,
+                notesContent: notesContent,
+                playgroundCode: playgroundCode,
+                maximized: false
+            });
+
+            // Trigger corresponding view initiators
+            if (type === 'iframe') {
+                loadFrameUrl(frameId, url);
+            } else if (type === 'playground') {
+                updatePlaygroundPreview(frameId);
+            }
+
+            updateWorkspaceUI();
+            autoSaveWorkspaceState();
         }
 
-        function handleEnter(event, frameId) {
-            if (event.key === 'Enter') triggerLoad(frameId);
+        function toggleDevTab(event, frameId, tabName) {
+            const card = document.getElementById(frameId);
+            if (!card) return;
+
+            // Update Tab Head styling
+            card.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            if (event && event.target) {
+                event.target.classList.add('active');
+            }
+
+            // Toggle active content panel
+            card.querySelectorAll('.dev-panel').forEach(p => p.classList.add('hidden'));
+            const activePanel = document.getElementById(`dev-panel-${tabName}-${frameId}`);
+            if (activePanel) activePanel.classList.remove('hidden');
         }
 
-        function toggleProxy(btn, frameId) {
-            btn.classList.toggle('active');
-            triggerLoad(frameId);
+        function processDevTools(frameId, action) {
+            if (action === 'json-beautify') {
+                const textarea = document.getElementById(`dev-json-input-${frameId}`);
+                try {
+                    const parsed = JSON.parse(textarea.value);
+                    textarea.value = JSON.stringify(parsed, null, 2);
+                    showToast("JSON Formatted successfully", "success");
+                } catch (e) {
+                    showToast("Invalid JSON syntax", "error");
+                }
+            } else if (action === 'json-minify') {
+                const textarea = document.getElementById(`dev-json-input-${frameId}`);
+                try {
+                    const parsed = JSON.parse(textarea.value);
+                    textarea.value = JSON.stringify(parsed);
+                    showToast("JSON Minified successfully", "success");
+                } catch (e) {
+                    showToast("Invalid JSON syntax", "error");
+                }
+            } else if (action === 'b64-encode') {
+                const textarea = document.getElementById(`dev-base64-input-${frameId}`);
+                try {
+                    textarea.value = btoa(textarea.value);
+                    showToast("Encoded to Base64", "success");
+                } catch (e) {
+                    showToast("Encoding failed: invalid characters", "error");
+                }
+            } else if (action === 'b64-decode') {
+                const textarea = document.getElementById(`dev-base64-input-${frameId}`);
+                try {
+                    textarea.value = atob(textarea.value);
+                    showToast("Decoded from Base64", "success");
+                } catch (e) {
+                    showToast("Decoding failed: invalid base64 string", "error");
+                }
+            } else if (action === 'url-encode') {
+                const textarea = document.getElementById(`dev-url-input-${frameId}`);
+                textarea.value = encodeURIComponent(textarea.value);
+                showToast("URL Encoded", "success");
+            } else if (action === 'url-decode') {
+                const textarea = document.getElementById(`dev-url-input-${frameId}`);
+                try {
+                    textarea.value = decodeURIComponent(textarea.value);
+                    showToast("URL Decoded", "success");
+                } catch (e) {
+                    showToast("Decoding failed", "error");
+                }
+            } else if (action === 'regex-match') {
+                const patternStr = document.getElementById(`dev-regex-pattern-${frameId}`).value;
+                const matchStr = document.getElementById(`dev-regex-input-${frameId}`).value;
+                const outputSpan = document.getElementById(`dev-regex-res-${frameId}`);
+                
+                try {
+                    const regex = new RegExp(patternStr);
+                    const matched = regex.test(matchStr);
+                    if (matched) {
+                        outputSpan.innerText = "Match Found! ✅";
+                        outputSpan.className = "text-[10px] font-bold text-emerald-500";
+                    } else {
+                        outputSpan.innerText = "No Match ❌";
+                        outputSpan.className = "text-[10px] font-bold text-rose-500";
+                    }
+                } catch (e) {
+                    outputSpan.innerText = "Invalid Regex Pattern";
+                    outputSpan.className = "text-[10px] font-bold text-yellow-500";
+                }
+            }
+            autoSaveWorkspaceState();
         }
 
-        function triggerLoad(frameId) {
+        function loadFrameUrl(frameId, targetUrl) {
+            const frameObj = framesList.find(f => f.id === frameId);
+            if (!frameObj) return;
+
             const card = document.getElementById(frameId);
             const input = card.querySelector('.url-input');
-            const iframe = card.querySelector('iframe');
-            const isProxyActive = card.querySelector('.proxy-toggle').classList.contains('active');
-            
-            let val = input.value.trim();
-            if (!val) return;
-
-            document.getElementById(`overlay-${frameId}`).style.display = 'flex';
-            document.getElementById(`spinner-${frameId}`).style.display = 'block';
-            document.getElementById(`status-${frameId}`).innerText = isProxyActive ? 'Routing through secure proxy...' : 'Connecting via native IP...';
-
-            let processedUrl = val;
-
-            if (val.includes(' ') || (!val.includes('.') && !val.includes('localhost'))) {
-                processedUrl = `https://www.google.com/search?igu=1&q=${encodeURIComponent(val)}`;
-            } else {
-                if (!/^https?:\/\//i.test(val)) {
-                    processedUrl = `https://${val}`;
-                }
-                
-                // ONLY use proxy if the user explicitly clicked the toggle
-                if (isProxyActive) {
-                    processedUrl = `https://corsproxy.io/?${encodeURIComponent(processedUrl)}`;
-                }
-            }
-
-            // Keep the input looking clean if not proxying
-            if(!isProxyActive && input.value !== processedUrl && !val.includes(' ')) {
-                input.value = processedUrl;
-            }
-
-            iframe.src = processedUrl;
-        }
-
-        function frameLoaded(frameId) {
             const iframe = document.getElementById(`iframe-${frameId}`);
-            if(iframe.src && iframe.src !== window.location.href && iframe.src !== 'about:blank') {
-                document.getElementById(`overlay-${frameId}`).style.display = 'none';
+            const loaderNotice = document.getElementById(`loader-notice-${frameId}`);
+
+            let formattedUrl = targetUrl.trim();
+            if (formattedUrl && !formattedUrl.startsWith('http://') && !formattedUrl.startsWith('https://')) {
+                if (formattedUrl.includes(' ') || !formattedUrl.includes('.')) {
+                    formattedUrl = 'https://duckduckgo.com/?q=' + encodeURIComponent(formattedUrl);
+                } else {
+                    formattedUrl = 'https://' + formattedUrl;
+                }
+            }
+
+            frameObj.url = formattedUrl;
+            if (input) input.value = formattedUrl;
+
+            const proxyMethod = document.getElementById('cors-proxy-select').value;
+            let finalUrlToLoad = formattedUrl;
+
+            if (proxyMethod === 'allorigins') {
+                finalUrlToLoad = 'https://api.allorigins.win/get?url=' + encodeURIComponent(formattedUrl);
+            } else if (proxyMethod === 'corsanywhere') {
+                finalUrlToLoad = 'https://cors-anywhere.herokuapp.com/' + formattedUrl;
+            }
+
+            if (iframe) {
+                if (loaderNotice) loaderNotice.classList.remove('hidden');
+                
+                iframe.onload = () => {
+                    if (loaderNotice) loaderNotice.classList.add('hidden');
+                };
+
+                iframe.src = finalUrlToLoad;
+            }
+
+            // Realignment timers trigger
+            setTimeout(() => {
+                applyViewportEmulationScale(frameId);
+            }, 100);
+            autoSaveWorkspaceState();
+        }
+
+        function triggerLoadUrl(frameId) {
+            const card = document.getElementById(frameId);
+            const input = card.querySelector('.url-input');
+            if (input) {
+                loadFrameUrl(frameId, input.value);
             }
         }
 
-        function refreshFrame(frameId) {
-            triggerLoad(frameId);
+        function handleFrameUrlInput(event, frameId) {
+            if (event.key === 'Enter') {
+                triggerLoadUrl(frameId);
+            }
+        }
+
+        function reloadFrame(frameId) {
+            const frameObj = framesList.find(f => f.id === frameId);
+            if (frameObj) {
+                loadFrameUrl(frameId, frameObj.url);
+                showToast("Refreshed frame viewport.", "info");
+            }
         }
 
         function removeFrame(frameId) {
             const card = document.getElementById(frameId);
-            if (card) card.remove();
+            if (card) {
+                card.remove();
+                framesList = framesList.filter(f => f.id !== frameId);
+                showToast("Removed workspace viewport.", "info");
+                updateWorkspaceUI();
+                autoSaveWorkspaceState();
+            }
         }
+
+        function updateFrameTitle(frameId, newTitle) {
+            const frameObj = framesList.find(f => f.id === frameId);
+            if (frameObj) {
+                frameObj.title = newTitle;
+                autoSaveWorkspaceState();
+            }
+        }
+
+        function updatePlaygroundPreview(frameId) {
+            const codeArea = document.getElementById(`text-playground-${frameId}`);
+            const previewIframe = document.getElementById(`iframe-playground-${frameId}`);
+            if (!codeArea || !previewIframe) return;
+
+            const codeContent = codeArea.value;
+            
+            // Note: script tag inside template string must be escaped as '<\/script>' 
+            // to avoid ending the parent HTML script block prematurely.
+            const playgroundTemplate = `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <meta charset="utf-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+                    <script src="https://cdn.tailwindcss.com"><\/script>
+                    <style>
+                        body { font-family: Inter, sans-serif; background-color: #0f172a; color: #f1f5f9; padding: 1.5rem; }
+                    </style>
+                </head>
+                <body>
+                    ${codeContent}
+                </body>
+                </html>
+            `;
+
+            try {
+                const doc = previewIframe.contentDocument || previewIframe.contentWindow.document;
+                doc.open();
+                doc.write(playgroundTemplate);
+                doc.close();
+            } catch (e) {
+                console.error("Local sandbox preview compilation failed", e);
+            }
+
+            const frameObj = framesList.find(f => f.id === frameId);
+            if (frameObj) {
+                frameObj.playgroundCode = codeContent;
+                autoSaveWorkspaceState();
+            }
+        }
+
+        function updateEmulationMode(frameId, mode) {
+            const frameObj = framesList.find(f => f.id === frameId);
+            if (!frameObj) return;
+
+            frameObj.device = mode;
+            applyViewportEmulationScale(frameId);
+            autoSaveWorkspaceState();
+        }
+
+        function applyViewportEmulationScale(frameId) {
+            const frameObj = framesList.find(f => f.id === frameId);
+            const container = document.getElementById(`view-container-${frameId}`);
+            const iframe = document.getElementById(`iframe-${frameId}`);
+            const resIndicator = document.getElementById(`res-val-${frameId}`);
+
+            if (!container || !iframe || !frameObj) return;
+
+            // Reset CSS layout structures
+            iframe.style.width = '100%';
+            iframe.style.height = '100%';
+            iframe.style.transform = 'none';
+            iframe.style.left = '0px';
+
+            const mode = frameObj.device;
+            let targetWidth = 0;
+            let targetHeight = 0;
+
+            if (mode === 'desktop') {
+                targetWidth = 1280;
+                targetHeight = 800;
+                if (resIndicator) resIndicator.innerText = "Desktop (1280px)";
+            } else if (mode === 'tablet') {
+                targetWidth = 768;
+                targetHeight = 1024;
+                if (resIndicator) resIndicator.innerText = "Tablet (768px)";
+            } else if (mode === 'mobile') {
+                targetWidth = 375;
+                targetHeight = 812;
+                if (resIndicator) resIndicator.innerText = "Mobile (375px)";
+            } else {
+                if (resIndicator) resIndicator.innerText = "Freeflow";
+                return;
+            }
+
+            const parentWidth = container.clientWidth;
+            const parentHeight = container.clientHeight;
+
+            const scaleX = parentWidth / targetWidth;
+            const scaleY = parentHeight / targetHeight;
+            const finalScale = Math.min(scaleX, scaleY, 1); 
+
+            iframe.style.width = `${targetWidth}px`;
+            iframe.style.height = `${targetHeight}px`;
+            iframe.style.transform = `scale(${finalScale})`;
+            iframe.style.transformOrigin = 'top left';
+
+            // Alignment offsets alignment to centralize viewports
+            const offsetLeft = Math.max(0, (parentWidth - (targetWidth * finalScale)) / 2);
+            iframe.style.left = `${offsetLeft}px`;
+        }
+
+        function runGlobalEmulationRealignments() {
+            framesList.forEach(frame => {
+                if (frame.type === 'iframe') {
+                    applyViewportEmulationScale(frame.id);
+                }
+            });
+        }
+
+        window.addEventListener('resize', runGlobalEmulationRealignments);
+
+        function configureSandboxModal(frameId) {
+            const frameObj = framesList.find(f => f.id === frameId);
+            if (!frameObj) return;
+
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 z-[99999]';
+            modal.id = 'temp-sandbox-modal';
+
+            const currentBoxes = frameObj.sandbox || [];
+
+            modal.innerHTML = `
+                <div class="bg-slate-900 border border-slate-800 rounded-xl p-5 w-full max-w-sm text-slate-100 shadow-2xl">
+                    <h3 class="font-bold text-sm mb-1 text-white flex items-center gap-2">🔒 Security Sandbox Settings</h3>
+                    <p class="text-[10px] text-slate-400 mb-4">Set browser permissions for the selected frame viewport.</p>
+                    
+                    <div class="space-y-2 mb-4">
+                        <label class="flex items-center gap-2 text-xs cursor-pointer">
+                            <input type="checkbox" id="sb-scripts" class="accent-amber-500" ${currentBoxes.includes('allow-scripts') ? 'checked' : ''}>
+                            <span>Allow Scripts (Run Javascript)</span>
+                        </label>
+                        <label class="flex items-center gap-2 text-xs cursor-pointer">
+                            <input type="checkbox" id="sb-same" class="accent-amber-500" ${currentBoxes.includes('allow-same-origin') ? 'checked' : ''}>
+                            <span>Allow Same-Origin (Access local storage)</span>
+                        </label>
+                        <label class="flex items-center gap-2 text-xs cursor-pointer">
+                            <input type="checkbox" id="sb-forms" class="accent-amber-500" ${currentBoxes.includes('allow-forms') ? 'checked' : ''}>
+                            <span>Allow Forms (Process form inputs)</span>
+                        </label>
+                        <label class="flex items-center gap-2 text-xs cursor-pointer">
+                            <input type="checkbox" id="sb-popups" class="accent-amber-500" ${currentBoxes.includes('allow-popups') ? 'checked' : ''}>
+                            <span>Allow Popups & New Windows</span>
+                        </label>
+                    </div>
+
+                    <div class="flex gap-2 justify-end">
+                        <button onclick="document.getElementById('temp-sandbox-modal').remove()" class="px-3 py-1.5 bg-slate-800 text-xs text-slate-300 rounded hover:bg-slate-750 transition">Cancel</button>
+                        <button onclick="applySandboxSettings('${frameId}')" class="px-3 py-1.5 bg-[#C5A059] text-xs font-bold text-black rounded hover:bg-amber-400 transition">Apply & Reload</button>
+                    </div>
+                </div>
+            `;
+
+            document.body.appendChild(modal);
+        }
+
+        function applySandboxSettings(frameId) {
+            const frameObj = framesList.find(f => f.id === frameId);
+            const modal = document.getElementById('temp-sandbox-modal');
+            if (!frameObj || !modal) return;
+
+            const nextBoxes = [];
+            if (document.getElementById('sb-scripts').checked) nextBoxes.push('allow-scripts');
+            if (document.getElementById('sb-same').checked) nextBoxes.push('allow-same-origin');
+            if (document.getElementById('sb-forms').checked) nextBoxes.push('allow-forms');
+            if (document.getElementById('sb-popups').checked) nextBoxes.push('allow-popups');
+
+            frameObj.sandbox = nextBoxes;
+            
+            const iframe = document.getElementById(`iframe-${frameId}`);
+            if (iframe) {
+                iframe.setAttribute('sandbox', nextBoxes.join(' '));
+                reloadFrame(frameId);
+            }
+
+            modal.remove();
+            showToast("Successfully adjusted security sandbox parameters.", "success");
+            autoSaveWorkspaceState();
+        }
+
+        function toggleMaximizeFrame(frameId) {
+            const frameObj = framesList.find(f => f.id === frameId);
+            const card = document.getElementById(frameId);
+            if (!frameObj || !card) return;
+
+            if (frameObj.maximized) {
+                card.className = 'bg-[#12161A] border border-slate-800 rounded-xl flex flex-col shadow-xl min-h-[440px] max-w-full overflow-hidden transition-all duration-300 hover:border-slate-700/80';
+                frameObj.maximized = false;
+                showToast("Grid alignment restored.", "info");
+            } else {
+                card.className = 'bg-[#12161A] border-2 border-[#C5A059] rounded-xl flex flex-col shadow-2xl col-span-full h-[80vh] overflow-hidden transition-all duration-300';
+                frameObj.maximized = true;
+                showToast("Maximized view. Toggle again to restore.", "info");
+                card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+
+            setTimeout(() => {
+                applyViewportEmulationScale(frameId);
+            }, 300);
+        }
+
+        // Action Options
+        function globalRefresh() {
+            framesList.forEach(frame => {
+                if (frame.type === 'iframe') {
+                    reloadFrame(frame.id);
+                } else if (frame.type === 'playground') {
+                    updatePlaygroundPreview(frame.id);
+                }
+            });
+            showToast("Refreshed all active views.", "success");
+        }
+
+        function clearWorkspace() {
+            workspace.innerHTML = '';
+            framesList = [];
+            updateWorkspaceUI();
+            autoSaveWorkspaceState();
+            showToast("Cleared current workspace.", "info");
+        }
+
+        function updateGridColumns(columnType) {
+            workspace.className = 'grid gap-4 items-stretch w-full flex-1 transition-all duration-300';
+            
+            document.querySelectorAll("[id^='btn-col-']").forEach(btn => {
+                btn.className = 'px-2.5 py-1 rounded text-slate-400 hover:text-white transition';
+            });
+
+            const activeBtn = document.getElementById(`btn-col-${columnType}`);
+            if (activeBtn) {
+                activeBtn.className = 'px-2.5 py-1 rounded bg-slate-800 text-[#C5A059] font-bold';
+            }
+
+            if (columnType === 'auto') {
+                workspace.classList.add('grid-cols-1', 'md:grid-cols-2', 'lg:grid-cols-3');
+            } else if (columnType === '1') {
+                workspace.classList.add('grid-cols-1');
+            } else if (columnType === '2') {
+                workspace.classList.add('grid-cols-1', 'md:grid-cols-2');
+            } else if (columnType === '3') {
+                workspace.classList.add('grid-cols-1', 'md:grid-cols-3');
+            } else if (columnType === '4') {
+                workspace.classList.add('grid-cols-1', 'md:grid-cols-2', 'lg:grid-cols-4');
+            }
+
+            setTimeout(runGlobalEmulationRealignments, 350);
+        }
+
+        function adjustGridGap(value) {
+            workspace.style.gap = `${value}px`;
+            document.getElementById('gap-value').innerText = `${value}px`;
+        }
+
+        function updateWorkspaceUI() {
+            const count = framesList.length;
+            document.getElementById('stats-active-frames').innerText = count;
+
+            if (count === 0) {
+                emptyState.classList.remove('hidden');
+                workspace.classList.add('hidden');
+            } else {
+                emptyState.classList.add('hidden');
+                workspace.classList.remove('hidden');
+            }
+        }
+
+        function runDiagTest() {
+            let testUrl = diagUrlInput.value.trim();
+            if (!testUrl) {
+                showToast("Please provide a valid URL to test.", "error");
+                return;
+            }
+
+            if (!testUrl.startsWith('http://') && !testUrl.startsWith('https://')) {
+                testUrl = 'https://' + testUrl;
+            }
+
+            diagResult.className = "mt-3 text-xs p-3 rounded-lg bg-slate-950 border border-slate-800 flex items-center gap-2 text-slate-400";
+            diagResult.innerHTML = `<span class="animate-pulse">Analyzing frame headers for security rules...</span>`;
+            diagResult.classList.remove('hidden');
+
+            fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(testUrl)}`)
+                .then(response => {
+                    if (response.ok) return response.json();
+                    throw new Error('Connection failed.');
+                })
+                .then(data => {
+                    diagResult.className = "mt-3 text-xs p-3 rounded-lg bg-emerald-950/40 text-emerald-300 border border-emerald-900/50";
+                    diagResult.innerHTML = `
+                        <strong>✅ Target Connection OK</strong>
+                        <p class="mt-1 leading-relaxed text-[11px] text-emerald-400">
+                            The requested target responded with status OK. Note: Strict frame options must still be bypassed via custom sandbox codes.
+                        </p>
+                    `;
+                })
+                .catch(err => {
+                    diagResult.className = "mt-3 text-xs p-3 rounded-lg bg-rose-950/40 text-rose-300 border border-rose-900/50";
+                    diagResult.innerHTML = `
+                        <strong>⚠️ Target Blocked / CORS Restricted</strong>
+                        <p class="mt-1 leading-relaxed text-[11px] text-rose-400">
+                            Target is protected by same-origin rules. Consider building customized views inside the built-in Sandbox Playground.
+                        </p>
+                    `;
+                });
+        }
+
+        function getUpdatedFrameStatesArray() {
+            return framesList.map(frame => {
+                const updated = { ...frame };
+                if (frame.type === 'notes') {
+                    const el = document.getElementById(`notes-${frame.id}`);
+                    if (el) updated.notesContent = el.value;
+                } else if (frame.type === 'playground') {
+                    const el = document.getElementById(`text-playground-${frame.id}`);
+                    if (el) updated.playgroundCode = el.value;
+                }
+                return updated;
+            });
+        }
+
+        function autoSaveWorkspaceState() {
+            const finalState = getUpdatedFrameStatesArray();
+            localStorage.setItem('zframes_autosave', JSON.stringify(finalState));
+        }
+
+        function loadAutosaveState() {
+            const saved = localStorage.getItem('zframes_autosave');
+            if (saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    if (Array.isArray(parsed) && parsed.length > 0) {
+                        parsed.forEach(frame => {
+                            addFrame(frame.type, frame);
+                        });
+                        showToast("Autosave state restored.", "info");
+                        return;
+                    }
+                } catch (e) {
+                    console.error("Failed to restore previous state", e);
+                }
+            }
+            // Standard fallback view
+            addFrame('iframe', { url: 'https://example.com' });
+        }
+
+        function saveCurrentWorkspace() {
+            const input = document.getElementById('new-workspace-name');
+            const name = input.value.trim();
+            if (!name) {
+                showToast("Please enter a workspace slot name.", "error");
+                return;
+            }
+
+            const currentWorkspaces = JSON.parse(localStorage.getItem('zframes_saved_profiles') || '{}');
+            currentWorkspaces[name] = getUpdatedFrameStatesArray();
+            
+            localStorage.setItem('zframes_saved_profiles', JSON.stringify(currentWorkspaces));
+            input.value = '';
+            showToast(`Saved customized profile: ${name}`, "success");
+            populateCustomWorkspaceDropdown();
+        }
+
+        function loadCustomProfile(name) {
+            const profiles = JSON.parse(localStorage.getItem('zframes_saved_profiles') || '{}');
+            const target = profiles[name];
+            if (target) {
+                clearWorkspace();
+                target.forEach(frame => {
+                    addFrame(frame.type, frame);
+                });
+                showToast(`Successfully loaded profile: ${name}`, "success");
+            }
+        }
+
+        function deleteCustomProfile(name, event) {
+            event.stopPropagation();
+            const profiles = JSON.parse(localStorage.getItem('zframes_saved_profiles') || '{}');
+            delete profiles[name];
+            localStorage.setItem('zframes_saved_profiles', JSON.stringify(profiles));
+            populateCustomWorkspaceDropdown();
+            showToast(`Deleted profile: ${name}`, "info");
+        }
+
+        function populateCustomWorkspaceDropdown() {
+            const profiles = JSON.parse(localStorage.getItem('zframes_saved_profiles') || '{}');
+            customWorkspaceList.innerHTML = '';
+            
+            const keys = Object.keys(profiles);
+            if (keys.length === 0) {
+                customWorkspaceList.innerHTML = `<div class="text-[11px] text-slate-500 text-center py-2 italic">No custom profiles stored</div>`;
+                return;
+            }
+
+            keys.forEach(name => {
+                const btn = document.createElement('div');
+                btn.className = "w-full text-left px-4 py-2 text-xs text-slate-300 hover:bg-slate-800 flex items-center justify-between cursor-pointer transition";
+                btn.onclick = () => loadCustomProfile(name);
+                btn.innerHTML = `
+                    <span>📁 ${name}</span>
+                    <button onclick="deleteCustomProfile('${name}', event)" class="text-rose-500 hover:text-rose-400 font-bold px-1.5 py-0.5 rounded transition">&times;</button>
+                `;
+                customWorkspaceList.appendChild(btn);
+            });
+        }
+
+        function loadTemplate(key) {
+            const template = templates[key];
+            if (template) {
+                clearWorkspace();
+                template.forEach(frame => {
+                    addFrame(frame.type, frame);
+                });
+                showToast("Standard workspace template initialized.", "success");
+            }
+        }
+
+        function setTheme(themeKey) {
+            const selected = themes[themeKey];
+            if (!selected) return;
+
+            document.documentElement.style.setProperty('--accent', selected.accent);
+            document.documentElement.style.setProperty('--accent-glow', selected.accentGlow);
+            document.documentElement.style.setProperty('--neon-border', selected.neonBorder);
+
+            const indicator = document.getElementById('theme-indicator');
+            if (indicator) {
+                indicator.style.backgroundColor = selected.accent;
+                indicator.innerText = selected.indicatorText;
+            }
+
+            showToast(`Interface visual theme updated.`, "success");
+            localStorage.setItem('zframes_theme', themeKey);
+        }
+
+        // Modals management trigger functions
+        const docsModal = document.getElementById('docsModal');
+        const diagModal = document.getElementById('diagnosticsModal');
+
+        function openDocs() { docsModal.showModal(); }
+        function closeDocs() { docsModal.close(); }
+
+        function openDiagnostics() { diagModal.showModal(); }
+        function closeDiagnostics() { diagModal.close(); }
+
+        const modalItems = [docsModal, diagModal];
+        modalItems.forEach(m => {
+            m.addEventListener('click', (e) => {
+                const rect = m.getBoundingClientRect();
+                if (
+                    e.clientX < rect.left || e.clientX > rect.right ||
+                    e.clientY < rect.top || e.clientY > rect.bottom
+                ) {
+                    m.close();
+                }
+            });
+        });
+
+        // Application initiator entry point
+        window.onload = () => {
+            loadAutosaveState();
+            populateCustomWorkspaceDropdown();
+
+            const cachedTheme = localStorage.getItem('zframes_theme');
+            if (cachedTheme) setTheme(cachedTheme);
+
+            document.getElementById('cors-proxy-select').addEventListener('change', () => {
+                showToast("Proxy changes will affect newly loaded frame endpoints.", "info");
+            });
+        };
     </script>
 </body>
 </html>
